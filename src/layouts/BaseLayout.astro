@@ -1,0 +1,63 @@
+---
+const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
+import "../styles/global.css";
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+
+  </head>
+  <body class="bg-white text-gray-900 font-sans antialiased">
+<header class="bg-white shadow-sm">
+  <div class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
+    <div>
+      <a href="/" class="group">
+        <h1 class="text-2xl font-extrabold text-blue-900 group-hover:underline">Pablo J Lebed</h1>
+        <p class="text-base font-semibold text-blue-800 tracking-wide">Analytical Chemist</p>
+      </a>
+    </div>
+
+    <button id="menu-toggle" class="md:hidden text-blue-900 focus:outline-none text-3xl leading-none">
+      ☰
+    </button>
+
+    <nav id="navbar" class="hidden md:flex space-x-8 text-blue-900 font-semibold tracking-wide">
+      <a href="/" class="hover:text-blue-700 transition">Home</a>
+      <a href="/services" class="hover:text-blue-700 transition">Services</a>
+      <a href="/about" class="hover:text-blue-700 transition">About</a>
+      <a href="/contact" class="hover:text-blue-700 transition">Contact</a>
+    </nav>
+  </div>
+
+  <div id="mobile-nav" class="md:hidden hidden px-6 pb-6 space-y-4 text-blue-900 font-semibold tracking-wide">
+    <a href="/" class="block hover:text-blue-700 transition">Home</a>
+    <a href="/services" class="block hover:text-blue-700 transition">Services</a>
+    <a href="/about" class="block hover:text-blue-700 transition">About</a>
+    <a href="/contact" class="block hover:text-blue-700 transition">Contact</a>
+  </div>
+</header>
+
+
+    <main class="max-w-4xl mx-auto px-4 py-6">
+      <slot />
+    </main>
+
+    <footer class="text-sm text-gray-600 py-8 border-t mt-12 text-center">
+      © {new Date().getFullYear()} Pablo Lebed. All rights reserved.
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const toggle = document.getElementById("menu-toggle");
+        const mobileNav = document.getElementById("mobile-nav");
+        toggle.addEventListener("click", () => {
+          mobileNav.classList.toggle("hidden");
+        });
+      });
+    </script>
+  </body>
+</html>

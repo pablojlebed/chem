@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #1E293B; /* slate-800 */
+}
