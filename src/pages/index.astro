@@ -1,33 +1,39 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro"
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-
 <BaseLayout title="Home – Pablo Lebed">
-<section class="flex flex-col-reverse md:flex-row items-center gap-10 pt-8 pb-6 px-4 sm:px-8 md:px-16">
-  <div class="flex-1 text-left">
-    <h1 class="text-4xl sm:text-5xl font-bold text-blue-900 leading-tight max-w-3xl">
-      Freelance Analytical Chemist helping teams turn complex chemical data into clarity and confidence.
-    </h1>
+  <section
+    class="flex flex-col-reverse md:flex-row items-center gap-10 pt-8 pb-6 px-4 sm:px-8 md:px-16"
+  >
+    <div class="flex-1 text-left">
+      <h1
+        class="text-4xl sm:text-5xl font-bold text-blue-900 leading-tight max-w-3xl"
+      >
+        Freelance Analytical Chemist helping teams turn complex chemical data
+        into clarity and confidence.
+      </h1>
 
-    <p class="text-lg text-gray-700 max-w-2xl mt-4">
-      I specialize in method development, data interpretation, and problem-solving in analytical labs across Europe.
-    </p>
+      <p class="text-lg text-gray-700 max-w-2xl mt-4">
+        I specialize in method development, data interpretation,
+        problem-solving, and quality management in analytical labs across
+        Europe, ensuring reliable and compliant results.
+      </p>
 
-    <a
-      href="/contact"
-      class="inline-block mt-6 bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-800 transition"
-    >
-      Work with me
-    </a>
-  </div>
+      <a
+        href="/contact"
+        class="inline-block mt-6 bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-800 transition"
+      >
+        Work with me
+      </a>
+    </div>
 
-  <div class="flex-1 flex justify-center">
-    <img
-      src="/images/profile.jpg"
-      alt="Pablo Lebed"
-      class="rounded-full w-64 h-64 object-cover shadow-xl"
-    />
-  </div>
-</section>
+    <div class="flex-1 flex justify-center">
+      <img
+        src="/images/profile.jpg"
+        alt="Pablo Lebed"
+        class="rounded-full w-64 h-64 object-cover shadow-xl"
+      />
+    </div>
+  </section>
 </BaseLayout>
