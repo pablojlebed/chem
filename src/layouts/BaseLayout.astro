@@ -1,53 +1,127 @@
 ---
+// src/layouts/BaseLayout.astro
 const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
-import "../styles/global.css";
+// No explicit import of global.css here, it's handled by Astro's build system
 ---
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <title>{title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
-
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style is:global>
+      @import "../styles/global.css";
+    </style>
   </head>
-  <body class="bg-white text-gray-900 font-sans antialiased">
-<header class="bg-white shadow-sm">
-  <div class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-    <div>
-      <a href="/" class="group">
-        <h1 class="text-2xl font-extrabold text-blue-900 group-hover:underline">Pablo J Lebed</h1>
-        <p class="text-base font-semibold text-blue-700 tracking-wide">Analytical Chemist</p>
-      </a>
-    </div>
+  <body class="bg-white text-gray-700 font-sans antialiased">
+    {/* General text color and font-sans */}
 
-    <button id="menu-toggle" class="md:hidden text-blue-900 focus:outline-none text-3xl leading-none">
-      ☰
-    </button>
+    <header class="bg-white shadow-light">
+      <div
+        class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between"
+      >
+        {/* Logo/Name Section */}
+        <div>
+          <a href="/" class="group block">
+            {/* Removed default text-gray-900 from group as h1/p will define */}
+            <h1
+              class="text-2xl font-bold leading-tight !my-0 text-primary-blue group-hover:text-primary-blue-dark transition-colors duration-200"
+            >
+              {/* Set H1 color to primary-blue, primary-blue-dark on hover */}
+              Pablo J Lebed
+            </h1>
+            <p
+              class="text-base font-semibold text-gray-700 tracking-wide leading-tight !my-0"
+            >
+              {/* Keep as gray-700 */}
+              Analytical Chemist
+            </p>
+          </a>
+        </div>
 
-    <nav id="navbar" class="hidden md:flex space-x-8 text-blue-900 font-semibold tracking-wide">
-      <a href="/" class="hover:text-blue-700 transition">Home</a>
-      <a href="/services" class="hover:text-blue-700 transition">Services</a>
-      <a href="/technical-notes" class="hover:text-blue-700">Technical Notes</a>
-      <a href="/about" class="hover:text-blue-700 transition">About</a>
-      <a href="/contact" class="hover:text-blue-700 transition">Contact</a>
-    </nav>
-  </div>
+        {/* Mobile Menu Toggle */}
+        <button
+          id="menu-toggle"
+          class="md:hidden text-gray-900 focus:outline-none text-3xl leading-none"
+        >
+          {/* Use gray-900 */}
+          ☰
+        </button>
 
-  <div id="mobile-nav" class="md:hidden hidden px-6 pb-6 space-y-4 text-blue-900 font-semibold tracking-wide">
-    <a href="/" class="block hover:text-blue-700 transition">Home</a>
-    <a href="/services" class="block hover:text-blue-700 transition">Services</a>
-    <a href="/about" class="block hover:text-blue-700 transition">About</a>
-    <a href="/contact" class="block hover:text-blue-700 transition">Contact</a>
-  </div>
-</header>
+        {/* Desktop Navigation */}
+        <nav
+          id="navbar"
+          class="hidden md:flex space-x-8 text-gray-700 font-semibold tracking-wide"
+        >
+          {/* Use gray-700 */}
+          <a
+            href="/"
+            class="hover:text-primary-blue transition-colors duration-200"
+            >Home</a
+          >
+          {/* Use primary-blue hover */}
+          <a
+            href="/services"
+            class="hover:text-primary-blue transition-colors duration-200"
+            >Services</a
+          >
+          <a
+            href="/technical-notes"
+            class="hover:text-primary-blue transition-colors duration-200"
+            >Technical Notes</a
+          >
+          <a
+            href="/about"
+            class="hover:text-primary-blue transition-colors duration-200"
+            >About</a
+          >
+          <a
+            href="/contact"
+            class="hover:text-primary-blue transition-colors duration-200"
+            >Contact</a
+          >
+        </nav>
+      </div>
 
+      {/* Mobile Navigation */}
+      <div
+        id="mobile-nav"
+        class="md:hidden hidden px-6 pb-6 space-y-4 text-gray-700 font-semibold tracking-wide"
+      >
+        {/* Use gray-700 */}
+        <a
+          href="/"
+          class="block hover:text-primary-blue transition-colors duration-200"
+          >Home</a
+        >
+        <a
+          href="/services"
+          class="block hover:text-primary-blue transition-colors duration-200"
+          >Services</a
+        >
+        <a
+          href="/about"
+          class="block hover:text-primary-blue transition-colors duration-200"
+          >About</a
+        >
+        <a
+          href="/contact"
+          class="block hover:text-primary-blue transition-colors duration-200"
+          >Contact</a
+        >
+      </div>
+    </header>
 
-    <main class="max-w-4xl mx-auto px-4 py-6">
+    <main class="max-w-4xl mx-auto px-4 py-6 flex-grow">
       <slot />
     </main>
 
-    <footer class="text-sm text-gray-600 py-8 border-t mt-12 text-center">
+    <footer
+      class="text-sm text-gray-600 py-8 border-t border-gray-200 mt-12 text-center"
+    >
+      {/* Use gray-600 and gray-200 */}
       © {new Date().getFullYear()} Pablo Lebed. All rights reserved.
     </footer>
 
@@ -55,9 +129,11 @@ import "../styles/global.css";
       document.addEventListener("DOMContentLoaded", () => {
         const toggle = document.getElementById("menu-toggle");
         const mobileNav = document.getElementById("mobile-nav");
-        toggle.addEventListener("click", () => {
-          mobileNav.classList.toggle("hidden");
-        });
+        if (toggle && mobileNav) {
+          toggle.addEventListener("click", () => {
+            mobileNav.classList.toggle("hidden");
+          });
+        }
       });
     </script>
   </body>

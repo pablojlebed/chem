@@ -1,11 +1,12 @@
-// @ts-check
-import { defineConfig } from 'astro/config';
+// astro.config.mjs
+import { defineConfig } from "astro/config";
+import tailwind from "@astrojs/tailwind"; // <-- THIS IS THE CORRECT IMPORT FOR PATH 1
 
-import tailwindcss from '@tailwindcss/vite';
-
-// https://astro.build/config
 export default defineConfig({
-  vite: {
-    plugins: [tailwindcss()]
-  }
+  integrations: [
+    tailwind(), // <-- THIS IS THE CORRECT INTEGRATION FOR PATH 1
+    // Add other integrations if truly needed for THIS project (e.g., mdx())
+  ],
+  // IMPORTANT: There should be NO 'vite' block related to PostCSS/Tailwind here.
+  // The @astrojs/tailwind integration handles that internally for Path 1.
 });
