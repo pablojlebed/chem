@@ -17,9 +17,9 @@ export default {
         "gray-900": "#111827",
 
         // Primary Accent Color (from web dev portfolio)
-        "primary-blue": "#3B82F6", // A vibrant, clear blue
-        "primary-blue-light": "#60A5FA", // Lighter shade for hover
-        "primary-blue-dark": "#2563EB", // Darker shade for active/focus
+        "primary-blue": '#1D4ED8', // A vibrant, clear blue
+        "primary-blue-light": '#2563EB', // Lighter shade for hover
+        "primary-blue-dark": '#1E3A8A', // Darker shade for active/focus
 
         // Secondary Accent Color (from web dev portfolio)
         "accent-green": "#10B981", // A calm, fresh green
