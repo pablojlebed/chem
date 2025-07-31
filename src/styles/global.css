@@ -15,7 +15,7 @@
       "colors.gray-700"
     ); /* Default body text color from web dev portfolio */
     background-color: theme(
-      "colors.white"
+      "colors.gray-50"
     ); /* Keeping white background for body as per AC site screenshot */
     line-height: 1.6;
   }
