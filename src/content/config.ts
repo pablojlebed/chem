@@ -10,7 +10,8 @@ const notesCollection = defineCollection({
     pubDate: z.date(), // Publication date
     updatedDate: z.date().optional(), // Optional update date
     tags: z.array(z.string()).default(['technical']), // Tags for filtering/categorization
-    heroImage: z.string().optional(), // Optional hero image for the note
+    heroImage: z.string().optional(),
+    author: z.string(), // Optional hero image for the note
   }),
 });
 
