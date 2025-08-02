@@ -1,41 +1,32 @@
 ---
-// src/pages/services.astro
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Services">
-  {/* Main Services Section - Styled as a central card */}
   <section class="max-w-3xl mx-auto py-12 md:py-16 px-4">
-    {/* Removed bg-white, rounded-xl, shadow-medium */}
     <h1
       class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200"
     >
-      {/* Consistent heading style */}
       Analytical Chemistry Services
     </h1>
+
     <p class="text-gray-700 text-lg mb-10">
-      {/* Consistent paragraph style */}
-      I help companies understand and improve their products through expert-level
-      analytical chemistry.
+      I help companies understand and improve their products through
+      expert-level analytical chemistry.
     </p>
 
-    <div class="space-y-8">
-      {/* Vertical space between service items */}
-      {/* Service Item 1 */}
-      <div>
+    <ul class="space-y-8" role="list" aria-label="List of services offered">
+      <li>
         <h2 class="text-xl font-semibold text-gray-900 mb-2">
           Quality Management System (QMS) Development
         </h2>
-        {/* Use gray-900 for service headings */}
         <p class="text-gray-700">
-          {/* Consistent body text color */}
-          I assist laboratories in designing and implementing a robust Quality Management
-          System aligned with ISO 17025 standards.
+          I assist laboratories in designing and implementing a robust Quality
+          Management System aligned with ISO 17025 standards.
         </p>
-      </div>
+      </li>
 
-      {/* NEW SERVICE ITEM: Knowledge Management */}
-      <div>
+      <li>
         <h2 class="text-xl font-semibold text-gray-900 mb-2">
           Knowledge Management
         </h2>
@@ -44,10 +35,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           critical information, ensuring valuable knowledge is retained and
           accessible for improved operational efficiency and decision-making.
         </p>
-      </div>
+      </li>
 
-      {/* Service Item 2 */}
-      <div>
+      <li>
         <h2 class="text-xl font-semibold text-gray-900 mb-2">
           Method Development & Validation
         </h2>
@@ -55,10 +45,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           Tailored analytical methods for complex matrices. Reliable,
           regulatory-ready, and robust.
         </p>
-      </div>
+      </li>
 
-      {/* Service Item 3 */}
-      <div>
+      <li>
         <h2 class="text-xl font-semibold text-gray-900 mb-2">
           Continuous Improvement Initiatives
         </h2>
@@ -66,10 +55,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           I help laboratories identify and implement continuous improvement
           opportunities that enhance efficiency, traceability, and quality.
         </p>
-      </div>
+      </li>
 
-      {/* Service Item 4 */}
-      <div>
+      <li>
         <h2 class="text-xl font-semibold text-gray-900 mb-2">
           Spectroscopic & Chromatographic Analysis
         </h2>
@@ -77,10 +65,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           Proficient in ICP-MS, ICP-OES, HPLC, GC, TGA, XRF. Accurate
           quantitative and qualitative interpretation.
         </p>
-      </div>
+      </li>
 
-      {/* Service Item 5 */}
-      <div>
+      <li>
         <h2 class="text-xl font-semibold text-gray-900 mb-2">
           Data Interpretation & Reporting
         </h2>
@@ -88,28 +75,25 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           Clear, concise reports with actionable insight. Optional review
           meetings included.
         </p>
-      </div>
+      </li>
 
-      {/* Service Item 6 */}
-      <div>
+      <li>
         <h2 class="text-xl font-semibold text-gray-900 mb-2">
           Custom Consulting
         </h2>
         <p class="text-gray-700">
           Need a tailored solution? Let's discuss your lab or R&D goals.
         </p>
-      </div>
-    </div>
+      </li>
+    </ul>
 
-    {/* Call to Action Button */}
     <div class="mt-12 text-center">
-      {/* Centered the button for better balance */}
       <a
         href="/contact"
-        class="inline-block bg-primary-blue hover:bg-primary-blue-dark !text-white px-6 py-3 rounded-md font-semibold transition-colors duration-200 shadow-medium"
+        class="inline-block bg-primary-blue hover:bg-primary-blue-dark text-white hover:text-white px-6 py-3 rounded-md font-semibold transition-colors duration-200 shadow-medium"
+        aria-label="Go to contact page to work with Pablo"
       >
-        {/* Consistent button style */}
-        Work with me
+        Get in Touch
       </a>
     </div>
   </section>

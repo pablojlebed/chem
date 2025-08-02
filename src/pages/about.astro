@@ -6,66 +6,63 @@ const title = "About";
 ---
 
 <BaseLayout title={title}>
-  {/* Main About Section - Styled as a central card */}
-  <section class="max-w-3xl mx-auto py-12 md:py-16 px-4">
-    {/* Removed bg-white, rounded-xl, shadow-medium */}
+  <section
+    class="max-w-3xl mx-auto py-12 md:py-16 px-4"
+    aria-labelledby="about-heading"
+  >
     <h1
+      id="about-heading"
       class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200"
     >
-      {/* Consistent heading style */}
       About Me
     </h1>
 
     <p class="mb-4 text-lg text-gray-700">
-      {/* Consistent paragraph style */}
-      I’m Pablo, a freelance Analytical Chemist with +15 years of experience in precise,
-      quality-focused chemical analysis. I specialize in atomic spectroscopy, trace
-      metal analysis, and method validation for complex matrices — especially in
-      the battery materials, nanomedicine, environmental, and radiochemistry sectors.
+      I’m Pablo, a freelance Analytical Chemist with +15 years of experience in
+      precise, quality-focused chemical analysis. I specialize in atomic
+      spectroscopy, trace metal analysis, and method validation for complex
+      matrices — especially in the battery materials, nanomedicine,
+      environmental, and radiochemistry sectors.
     </p>
 
     <p class="mb-4 text-lg text-gray-700">
-      {/* Consistent paragraph style */}
       I’ve worked in state-of-the-art labs and have led analytical projects from
       method development to reporting. Now I help companies who need top-quality
       results but don’t want to build a full in-house team.
     </p>
 
     <p class="mb-4 text-lg text-gray-700">
-      {/* Consistent paragraph style */}
-      I also support labs with quality management and continuous improvement initiatives
-      — from refining processes and documentation to aligning with ISO 17025. If
-      you're looking to boost efficiency, traceability, and audit readiness, I can
-      help you build systems that work.
+      I also support labs with quality management and continuous improvement
+      initiatives — from refining processes and documentation to aligning with
+      ISO 17025. If you're looking to boost efficiency, traceability, and audit
+      readiness, I can help you build systems that work.
     </p>
 
     <p class="mb-4 text-lg text-gray-700">
-      {/* Consistent paragraph style */}
-      I combine deep technical skills with sharp communication and reliable delivery.
-      My work is thorough, well-documented, and tailored to your needs.
+      I combine deep technical skills with sharp communication and reliable
+      delivery. My work is thorough, well-documented, and tailored to your
+      needs.
     </p>
 
     <p class="mb-4 text-lg text-gray-700">
-      {/* Consistent paragraph style */}
       Whether you need support on a short-term project or ongoing collaboration,
       I’m here to make your data rock-solid.
     </p>
 
     <div class="flex flex-wrap gap-4 mt-8">
-      {/* Container for buttons, with spacing */}
       <a
-        href="/CV Chem Pablo.pdf"
+        href="/cv-analytical-chemist-pablo.pdf"
         download
-        class="inline-block bg-primary-blue hover:bg-primary-blue-dark !text-white px-6 py-3 rounded-md font-semibold transition-colors duration-200 shadow-medium"
-        {/* Use primary-blue, rounded-md, shadow-medium */}
+        aria-label="Download Pablo's resume as PDF"
+        class="inline-block bg-primary-blue hover:bg-primary-blue-dark text-white hover:text-white px-6 py-3 rounded-md font-semibold transition-colors duration-200 shadow-medium"
       >
         Download Resume
       </a>
 
       <a
         href="/contact"
+        aria-label="Go to contact page to collaborate with Pablo"
         class="inline-block border-2 border-primary-blue text-primary-blue hover:bg-primary-blue hover:text-white px-6 py-3 rounded-md font-semibold transition-colors duration-200 shadow-medium"
-        {/* Use primary-blue border, shadow-medium */}
       >
         Let’s work together
       </a>

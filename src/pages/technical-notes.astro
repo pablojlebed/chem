@@ -1,56 +1,108 @@
 ---
 // src/pages/tech-notes.astro
-import { getCollection } from 'astro:content'; // Needed for content collections
-import BaseLayout from '../layouts/BaseLayout.astro'; // Correct path
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 // Get all entries from your 'notes' collection
-const allNotes = await getCollection('notes');
+const allNotes = await getCollection("notes");
 
-// Optional: Sort notes by publication date (newest first)
-const sortedNotes = allNotes.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+// Sort notes by publication date (newest first)
+// Ensure pubDate is defined as ZodDate in src/content/config.ts for type safety
+const sortedNotes = allNotes.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
 ---
 
 <BaseLayout
   title="Technical Notes - Pablo Lebed"
-  description="Collection of technical notes on various topics including hardware, server administration, and development."
+  description="A comprehensive collection of technical notes by Pablo Lebed, covering hardware, server administration, development insights, and more. Your go-to knowledge base."
+  canonicalURL={Astro.url.href}
+  {/* Ensure canonical URL is passed from page to layout */}
 >
   <section class="py-12 md:py-16 text-center">
-    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+    <h1
+      class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6"
+    >
       Technical Notes
     </h1>
     <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
-      This section serves as my personal knowledge base, documenting insights and solutions from my learning and development experiences.
+      This section serves as my personal knowledge base, documenting insights
+      and solutions from my learning and development experiences. From hardware
+      deep-dives to server administration tips and coding challenges, find
+      valuable resources here.
     </p>
   </section>
 
   {/* Main Technical Notes Listing Grid */}
   <section class="mt-12 md:mt-16">
-    <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200 text-center">
+    <h2
+      class="text-3xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200 text-center"
+    >
       Topics & Resources
     </h2>
-    
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 max-w-5xl mx-auto px-4">
-      {sortedNotes.map(note => (
-        <a href={`/tech-notes/${note.slug}`} class="block bg-white p-4 rounded-md shadow-light hover:shadow-medium transition-shadow duration-200 h-full !no-underline">
-          {note.data.heroImage && (
-            <img
-              src={note.data.heroImage}
-              alt={note.data.title}
-              class="w-full h-32 object-cover rounded-t-md mb-3" {/* Small hero image styling */}
-              loading="lazy" {/* Use lazy loading for cards */}
-            />
-          )}
-          <h3 class="text-lg font-semibold text-primary-blue mb-1 hover:underline">{note.data.title}</h3>
-          <p class="text-sm text-gray-700">{note.data.description}</p>
-          <div class="flex flex-wrap gap-1 mt-2">
-            {note.data.tags.map(tag => (
-              <span class="text-xs px-2 py-0.5 bg-gray-100 rounded text-gray-600 font-medium">
-                {tag}
-              </span>
-            ))}
-          </div>
-        </a>
-      ))}
-    </div>
+
+    {
+      sortedNotes.length === 0 ? (
+        <p class="text-center text-gray-600 italic py-12">
+          No technical notes found yet. Please check back later!
+        </p>
+      ) : (
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 max-w-5xl mx-auto px-4">
+          {" "}
+          {/* Increased gap for better spacing */}
+          {sortedNotes.map((note) => (
+            <a
+              href={`/tech-notes/${note.slug}`}
+              class="block bg-white p-4 rounded-lg shadow-light hover:shadow-medium transition-shadow duration-200 h-full !no-underline flex flex-col"
+              {
+              /* Added flex-col for better layout */ }
+              aria-label={`Read technical note: ${note.data.title}`}
+              {
+              /* Improved accessibility label */ }
+            >
+              {note.data.heroImage && (
+                <img
+                  src={note.data.heroImage}
+                  alt={`Hero image for ${note.data.title} technical note`}
+                  {
+                  /* More descriptive alt text */ }
+                  class="w-full h-32 object-cover rounded-md mb-3 flex-shrink-0"
+                  {
+                  /* flex-shrink-0 to prevent image squishing */ }
+                  loading="lazy"
+                />
+              )}
+              <h3 class="text-lg font-semibold text-primary-blue mb-1 hover:underline flex-grow">
+                {" "}
+                {/* flex-grow to push description/tags to bottom */}
+                {note.data.title}
+              </h3>
+              <p class="text-sm text-gray-700 mb-2">{note.data.description}</p>
+              {note.data.pubDate && (
+                <p class="text-xs text-gray-500 mt-auto">
+                  {" "}
+                  {/* mt-auto pushes it to the bottom */}
+                  Published:{" "}
+                  {note.data.pubDate.toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+              )}
+              <div class="flex flex-wrap gap-1 mt-2">
+                {note.data.tags.map((tag) => (
+                  <span class="text-xs px-2 py-0.5 bg-gray-100 rounded-full text-gray-600 font-medium">
+                    {" "}
+                    {/* rounded-full for pill-like tags */}
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </a>
+          ))}
+        </div>
+      )
+    }
   </section>
 </BaseLayout>

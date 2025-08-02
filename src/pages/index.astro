@@ -6,13 +6,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 <BaseLayout>
   <section
     class="flex flex-col md:flex-row items-center justify-start min-h-[calc(100vh-180px)] pt-8 pb-12 md:pt-16 md:pb-24"
+    aria-labelledby="hero-heading"
   >
-    {/* Adjusted top padding, kept bottom padding for balance */}
     <div class="md:w-1/2 text-center md:text-left p-4">
       <h1
+        id="hero-heading"
         class="text-5xl md:text-6xl font-bold leading-tight mb-4 text-gray-900"
       >
-        {/* Use font-bold and gray-900 */}
         Freelance Analytical Chemist transforming complex chemical data into clarity and
         confidence.
       </h1>
@@ -24,16 +24,15 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <a
         href="/contact"
         class="inline-block bg-primary-blue hover:bg-primary-blue-dark !text-white px-6 py-3 rounded-md font-semibold transition-colors duration-200 shadow-medium"
+        aria-label="Work with Pablo Lebed, contact for freelance analytical chemistry services"
       >
-        {/* Use primary-blue */}
         Work with me
       </a>
     </div>
     <div class="md:w-1/2 p-4 mt-8 md:mt-0 flex justify-center">
       <img
         src="/images/profile.jpg"
-        {/* Adjust path if needed */}
-        alt="Pablo Lebed"
+        alt="Portrait of Pablo Lebed, an analytical chemist specializing in data interpretation and quality management."
         class="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover shadow-medium"
       />
     </div>
