@@ -78,7 +78,7 @@
 
   a:hover,
   a:focus {
-    color: theme("colors.primary-blue-dark"); /* Darker blue on hover */
+    color: #1A73E8; /* Darker blue on hover */
     text-decoration: underline;
     outline: none;
   }
