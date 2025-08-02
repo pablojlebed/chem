@@ -21,4 +21,4 @@ The database is a practical resource for analytical chemists, lab professionals,
 
 
 ---
-The collection is regularly updated to reflect evolving industry needs. If you have questions, feedback, or suggestions for specific applications to include, please feel free to [get in touch](/contact").
+The collection is regularly updated to reflect evolving industry needs. If you have questions, feedback, or suggestions for specific applications to include, please feel free to [get in touch](/contact).
