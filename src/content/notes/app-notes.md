@@ -16,7 +16,7 @@ The database is a practical resource for analytical chemists, lab professionals,
 - **Recycling**
 - **Raw material manufacturing**
 
-[Visit the ICP-OES & ICP-MS Application Notes Database on Notion](https://bat-man.notion.site/ICP-Analysis-Battery-Industry-Application-Notes-1cd5e375ee2a81dba1a3e869d4837dc1)
+[Visit the ICP-OES & ICP-MS Application Notes Database on Notion](https://malachite-argument-fe8.notion.site/ICP-Analysis-Battery-Industry-Application-Notes-26c23cbb3bed81d5802ecfa18b36ee6b?pvs=74)
 
 ---
 
