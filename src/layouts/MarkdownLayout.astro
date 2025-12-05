@@ -18,7 +18,6 @@ const { title, description, author, pubDate, updatedDate, heroImage, tags } =
         author && (
           <p class="text-sm text-gray-600 mb-0">
             {" "}
-            {/* Same style as date, slightly smaller bottom margin */}
             By: <span class="font-semibold">{author}</span>
           </p>
         )
@@ -68,9 +67,7 @@ const { title, description, author, pubDate, updatedDate, heroImage, tags } =
         <img
           src={heroImage}
           alt={title}
-          class="w-96 h-96 object-cover mx-auto rounded-lg mb-8"
-          {
-          /* Changed w-full max-w-2xl to w-64 h-64 object-cover */ }
+          class="w-full h-auto object-contain mx-auto rounded-lg mb-8 shadow-lg border border-gray-100"
         />
       )
     }
