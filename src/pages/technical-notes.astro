@@ -3,37 +3,40 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
+// Get all entries from your 'notes' collection
 const allNotes = await getCollection("notes");
 
+// Sort notes by publication date (newest first)
 const sortedNotes = allNotes.sort(
   (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
 );
-
-const formatDate = (date: Date) => {
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
 ---
 
 <BaseLayout
   title="Technical Notes - Pablo Lebed"
-  description="A comprehensive collection of technical notes by Pablo Lebed."
+  description="A comprehensive collection of technical notes by Pablo Lebed, covering hardware, server administration, development insights, and more. Your go-to knowledge base."
   canonicalURL={Astro.url.href}
 >
   <section class="py-12 md:py-16 text-center">
-    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+    <h1
+      class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6"
+    >
       Technical Notes
     </h1>
     <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
-      This section is my personal knowledge hub.
+      This section is my personal knowledge hub, documenting insights and
+      solutions from my professional journey as an analytical chemist. Here,
+      you'll find resources ranging from deep dives into analytical
+      instrumentation to method development best practices, quality assurance,
+      knowledge management, and statistical process control (SPC).
     </p>
   </section>
 
-  <section class="mt-12 md:mt-16 pb-16">
-    <h2 class="text-3xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200 text-center">
+  {/* Main Technical Notes Listing Grid */}
+  <section class="mt-12 md:mt-16">
+    <h2
+      class="text-3xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200 text-center"
+    >
       Topics & Resources
     </h2>
 
@@ -43,52 +46,48 @@ const formatDate = (date: Date) => {
           No technical notes found yet. Please check back later!
         </p>
       ) : (
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 max-w-5xl mx-auto px-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 max-w-5xl mx-auto px-4 items-start">
           {sortedNotes.map((note) => (
             <a
               href={`/tech-notes/${note.slug}`}
-              class="group flex flex-col h-full bg-white border border-gray-100 p-4 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 !no-underline"
+              class="flex flex-col justify-between bg-white p-4 rounded-lg shadow-light hover:shadow-medium transition-shadow duration-200 h-full !no-underline"
               aria-label={`Read technical note: ${note.data.title}`}
             >
-              <div class="flex-grow">
+              <div>
                 {note.data.heroImage && (
-                  <div class="mb-4 flex justify-center bg-gray-50 rounded-md overflow-hidden">
-                     {/* UPDATED IMAGE TAG:
-                        - Removed 'w-full h-40 object-cover' (which forced size and cropping)
-                        - Added 'h-auto w-auto' (uses original size)
-                        - Added 'max-w-full' (prevents overflowing the card)
-                        - Added 'max-h-60' (Optional: prevents extremely tall images from ruining the grid)
-                     */}
-                    <img
-                      src={note.data.heroImage}
-                      alt={`Hero image for ${note.data.title}`}
-                      class="h-auto w-auto max-w-full max-h-60 object-contain transform group-hover:scale-105 transition-transform duration-300"
-                      loading="lazy"
-                    />
-                  </div>
+                  <img
+                    src={note.data.heroImage}
+                    alt={`Hero image for ${note.data.title} technical note`}
+                    class="w-full h-32 object-cover rounded-md mb-3"
+                    loading="lazy"
+                  />
                 )}
-                
-                <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-blue transition-colors">
+                <h3 class="text-lg font-semibold text-primary-blue mb-1 hover:underline">
                   {note.data.title}
                 </h3>
-                <p class="text-sm text-gray-600 mb-4 line-clamp-3">
+                <p class="text-sm text-gray-700 mb-2">
                   {note.data.description}
                 </p>
               </div>
 
-              <div class="pt-4 mt-auto border-t border-gray-100">
-                <div class="flex flex-wrap gap-2 mb-2">
+              <div>
+                {note.data.pubDate && (
+                  <p class="text-xs text-gray-500">
+                    Published:{" "}
+                    {note.data.pubDate.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
+                )}
+                <div class="flex flex-wrap gap-1 mt-2">
                   {note.data.tags.map((tag) => (
-                    <span class="text-[10px] uppercase tracking-wider px-2 py-1 bg-gray-50 text-gray-600 rounded-md font-semibold border border-gray-200">
+                    <span class="text-xs px-2 py-0.5 bg-gray-100 rounded-full text-gray-600 font-medium">
                       {tag}
                     </span>
                   ))}
                 </div>
-                {note.data.pubDate && (
-                  <p class="text-xs text-gray-400 font-medium text-right">
-                    {formatDate(note.data.pubDate)}
-                  </p>
-                )}
               </div>
             </a>
           ))}
