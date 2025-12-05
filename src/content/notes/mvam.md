@@ -33,11 +33,11 @@ Because of this, we—analytical chemists—must be ready to guide our colleague
 
 **Questions to Reflect On**
 
-What makes a method a method?
+- What makes a method a method?
 
-What can be removed from a method while still providing meaningful, directional data?
+- What can be removed from a method while still providing meaningful, directional data?
 
-Can you clearly explain why?
+- Can you clearly explain why?
 
 For further details, see the accompanying slides:
 👉 [MVAM Slides (PDF)](/slides/mvam.pdf)
