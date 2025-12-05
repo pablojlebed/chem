@@ -1,6 +1,6 @@
 ---
 title: Minimal Viable Analytical Method
-description: The Minimum Viable Analytical Method (MVAM) is a pragmatic, agile framework derived from the "minimum viable product" concept, designed to rapidly establish just enough analytical capability—such as basic sample preparation and simplified calibration—to generate crucial, timely, directional data for accelerated decision-making in exploratory and early-stage R&D.
+description: A pragmatic, agile framework derived from the "minimum viable product" concept, designed to rapidly establish just enough analytical capability—such as basic sample preparation and simplified calibration—to generate crucial, timely, directional data for accelerated decision-making in exploratory and early-stage R&D.
 pubDate: 2025-12-05T10:00:00Z
 tags: ["Analytical Method", "Minimum", "R&D"]
 heroImage: "/images/mvam.png"
