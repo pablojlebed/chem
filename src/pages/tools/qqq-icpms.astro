@@ -1,0 +1,23 @@
+---
+// 1. Import your site's main layout component
+// NOTE: Adjust the path below if your layout component is located elsewhere
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+// 2. Import the component you generated earlier
+import QQQSimulator from "../../components/qqq-simulator.astro";
+---
+
+<BaseLayout title="ICP-MS QQQ Simulator - The Lab Guy">
+  <main class="py-12 lg:px-8 min-h-screen bg-gray-50">
+    <div>
+      <!-- 
+                CRITICAL: The 'client:only="true"' directive is mandatory for this component.
+                It tells Astro to skip rendering on the server and load the component
+                (including all its JavaScript) exclusively on the client (browser).
+                This is necessary because the component relies heavily on browser APIs
+                like Chart.js and complex DOM manipulation.
+            -->
+      <QQQSimulator client:load="true" />
+    </div>
+  </main>
+</BaseLayout>
