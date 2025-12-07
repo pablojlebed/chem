@@ -1,0 +1,111 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const tools = [
+  {
+    title: "SPC Calculator & Chart",
+    description:
+      "Calculate and visualize statistical process control (SPC) data with X-bar and R charts.",
+    href: "/tools/spc-calculator",
+    icon: "📈", // Emoji placeholder for an icon
+  },
+  // Add new tools here in the future:
+];
+
+const title = "Collection of Engineering Tools";
+const description =
+  "A variety of interactive tools for quality control, statistics, and engineering calculations.";
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="max-w-3xl mx-auto py-12 md:py-16 px-4 tools-index-list">
+    <h1
+      class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200"
+    >
+      Engineering Tools
+    </h1>
+    <p class="mb-4 text-lg text-gray-700">{description}</p>
+
+    <div class="tool-cards-grid">
+      {
+        tools.map((tool) => (
+          <a href={tool.href} class="tool-card">
+            <span class="tool-icon">{tool.icon}</span>
+            <h3>{tool.title}</h3>
+            <p>{tool.description}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+  <style>
+    /* Styling for the Tool Index Page - Scoped to this file */
+
+    /* --- HEADER STYLES --- */
+
+    /* Removed the .tools-index-list class selector from h1 and p in the CSS
+   and replaced it with a style that assumes the header text is centered for the layout.
+   If you are using Tailwind, you would apply text-center directly in the HTML.
+*/
+
+    /* Using a direct p selector inside the section for the descriptive text */
+    .tools-index-list > p {
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: #333; /* Slightly lighter than the heading */
+      line-height: 1.5;
+      /* Since the block is centered, we don't need max-width to constrain text block */
+      margin-bottom: 3rem; /* Add extra space before the cards grid */
+    }
+    /* -------------------- */
+
+    .tool-cards-grid {
+      display: grid;
+      /* The grid itself will still be left-aligned within the max-width container */
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      padding-top: 1rem;
+    }
+    @media (max-width: 768px) {
+      .tool-cards-grid {
+        /* Fallback to a single column on smaller screens (less than 768px) */
+        grid-template-columns: 1fr;
+      }
+    }
+    .tool-card {
+      display: block;
+      padding: 1.5rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition:
+        transform 0.2s ease-in-out,
+        box-shadow 0.2s ease-in-out;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      border-color: var(--color-primary, #007bff);
+    }
+
+    .tool-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .tool-card h3 {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    .tool-card p {
+      color: #666;
+      font-size: 1rem;
+      margin: 0;
+    }
+  </style>
+</BaseLayout>

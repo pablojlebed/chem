@@ -87,6 +87,11 @@ const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
               >Technical Notes</a
             >
             <a
+              href="/tools"
+              class="hover:text-primary-blue transition-colors duration-200"
+              >Tools</a
+            >
+            <a
               href="/about"
               class="hover:text-primary-blue transition-colors duration-200"
               >About</a
@@ -119,6 +124,11 @@ const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
             class="block hover:text-primary-blue transition-colors duration-200"
             >Technical Notes</a
           >
+          <a
+            href="/tools"
+            class="block hover:text-primary-blue transition-colors duration-200"
+            >Tools</a
+          >
           {/* ADDED THIS LINE */}
           <a
             href="/about"
@@ -133,7 +143,7 @@ const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
         </div>
       </header>
 
-      <main class="max-w-4xl mx-auto px-4 py-6 flex-grow">
+      <main class="w-4xl mx-auto px-4 py-6 flex-grow">
         <slot />
       </main>
 

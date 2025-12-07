@@ -1,0 +1,1066 @@
+---
+// ASTRO FRONTMATTER: This block runs on the server during the build process.
+// We keep it empty since all the logic is client-side JavaScript.
+---
+
+<!-- 
+    This is the client-side component structure. 
+    It includes all necessary HTML, styling, and client-side JavaScript.
+    The 'client:load' directive is required on the SPCChart component tag in your Astro page.
+-->
+<div class="astro-component-container">
+  <!-- Load Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"
+  ></script>
+  <!-- Configure Tailwind for custom colors -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "cl-line": "#059669", // Emerald Green (Center Line)
+            "ucl-line": "#dc2626", // Red (UCL)
+            "lcl-line": "#1d4ed8", // Blue (LCL)
+            "data-point": "#4f46e5", // Indigo (Data)
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    /* Apply 'Inter' font and base styles */
+    .astro-component-container {
+      font-family: "Inter", sans-serif;
+      background-color: #f8fafc;
+      min-height: 100vh;
+    }
+
+    /* PERFECT FIX: Input grid now looks identical to Calculated Data Table */
+    #inputGrid td:not(:first-child) {
+      padding: 0 !important;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    #inputGrid td:not(:first-child) input {
+      width: 100%;
+      height: 100%;
+      min-height: 52px;
+      padding: 0.5rem 0.25rem;
+      border: none;
+      background: transparent;
+      text-align: center;
+      font-size: 0.875rem; /* matches Calculated Data Table */
+      font-weight: 500;
+      color: #374151;
+      font-variant-numeric: tabular-nums;
+      box-sizing: border-box;
+    }
+
+    #inputGrid td:not(:first-child) input:focus {
+      outline: none;
+      background: rgba(79, 70, 229, 0.05);
+      border: 2px solid #4f46e5;
+      border-radius: 0.375rem;
+    }
+
+    /* Hide spinners – one clean rule */
+    #inputGrid input::-webkit-inner-spin-button,
+    #inputGrid input::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    #inputGrid input {
+      -moz-appearance: textfield;
+    }
+
+    /* Nice hover effect */
+    #inputGrid tr:hover td:not(:first-child) input {
+      background: rgba(79, 70, 229, 0.08);
+    }
+
+    /* Sticky header for the input grid */
+    #inputGridContainer th {
+      z-index: 10;
+    }
+
+    /* Utility classes */
+    .icon-button {
+      @apply p-2 rounded-full text-indigo-600 hover:bg-indigo-50 hover:text-indigo-800 transition duration-150;
+    }
+    .icon-button-text-sm {
+      @apply p-1.5 rounded-md text-indigo-600 hover:bg-indigo-50 hover:text-indigo-800 transition duration-150 text-sm font-medium;
+    }
+  </style>
+
+  <!-- Outer container and header -->
+  <div class="w-full py-10 px-4 lg:px-12 max-w-7xl mx-auto">
+    <header class="mb-10 text-center">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">
+        SPC X-bar & R Control Chart Generator
+      </h1>
+      <p class="text-lg text-gray-500 max-w-2xl mx-auto">
+        A powerful tool for Statistical Process Control (SPC) analysis using the
+        Average (X-bar) and Range (R) methods.
+      </p>
+    </header>
+
+    <!-- Main Layout Grid -->
+    <div class="grid grid-cols-1 gap-8">
+      <!-- Data Input and Controls -->
+      <div class="p-8 bg-white rounded-xl border border-gray-200">
+        <div
+          class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6"
+        >
+          <div>
+            <h2 class="text-xl font-bold text-gray-900">Data Entry Grid</h2>
+            <p class="text-sm text-gray-500 mt-1">
+              Paste spreadsheet data into the top-left cell or enter manually.
+            </p>
+          </div>
+          <div
+            class="mt-4 md:mt-0 flex items-center bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100"
+          >
+            <span class="text-sm font-medium text-indigo-700 mr-2"
+              >Subgroup size (n):</span
+            >
+            <span id="n_val_input" class="font-bold text-indigo-800">4</span>
+          </div>
+        </div>
+
+        <!-- Input Table Container -->
+        <div
+          id="dataInputContainer"
+          class="overflow-x-auto max-h-[400px] border border-gray-200 rounded-lg bg-white mb-4"
+        >
+          <table id="inputGrid" class="w-full whitespace-nowrap table-fixed">
+            <thead>
+              <tr id="inputGridHeader">
+                <th
+                  class="sticky top-0 bg-gray-50 px-2 py-3 text-center text-xs font-semibold text-gray-500 w-[70px] border-b border-gray-200 border-r"
+                  >S.G.</th
+                >
+              </tr>
+            </thead>
+            <tbody id="inputGridBody">
+              <!-- Rows will be injected here -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex flex-wrap gap-3">
+          <button
+            onclick="addRow(5)"
+            class="flex-1 px-4 py-2.5 bg-white text-gray-700 font-medium rounded-lg hover:bg-gray-50 hover:text-indigo-600 transition duration-150 text-sm border border-gray-200 shadow-sm"
+          >
+            +5 Rows
+          </button>
+          <button
+            onclick="addColumn(1)"
+            class="flex-1 px-4 py-2.5 bg-white text-gray-700 font-medium rounded-lg hover:bg-gray-50 hover:text-indigo-600 transition duration-150 text-sm border border-gray-200 shadow-sm"
+          >
+            +1 Column
+          </button>
+          <button
+            onclick="calculateAndChart()"
+            class="w-full md:w-auto md:flex-[2] px-6 py-2.5 bg-indigo-600 text-white font-bold rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150"
+          >
+            Run Analysis
+          </button>
+        </div>
+      </div>
+
+      <!-- Calculation Summary -->
+      <div class="p-8 bg-white rounded-xl border border-gray-200">
+        <h2 class="text-xl font-bold text-gray-900 mb-6">
+          Control Limits & Parameters
+        </h2>
+
+        <!-- Control Limits Display -->
+        <div
+          id="resultsSummary"
+          class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
+        >
+          <!-- X-bar Limits -->
+          <div class="p-5 bg-yellow-50/50 rounded-lg border border-yellow-200">
+            <h3
+              class="font-bold text-lg text-yellow-900 mb-3 flex items-center"
+            >
+              <span class="w-2 h-2 rounded-full bg-yellow-500 mr-2"></span>
+              X-bar Chart Limits
+            </h3>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600">Center Line (CL)</span>
+                <span id="cl_x_bar" class="font-mono font-medium text-gray-900"
+                  >N/A</span
+                >
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600">Upper Control Limit (UCL)</span>
+                <span id="ucl_x_bar" class="font-mono font-medium text-gray-900"
+                  >N/A</span
+                >
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600">Lower Control Limit (LCL)</span>
+                <span id="lcl_x_bar" class="font-mono font-medium text-gray-900"
+                  >N/A</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Range Chart (R) Limits -->
+          <div class="p-5 bg-purple-50/50 rounded-lg border border-purple-200">
+            <h3
+              class="font-bold text-lg text-purple-900 mb-3 flex items-center"
+            >
+              <span class="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>
+              Range Chart (R) Limits
+            </h3>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600">Center Line (CL)</span>
+                <span id="cl_r" class="font-mono font-medium text-gray-900"
+                  >N/A</span
+                >
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600">Upper Control Limit (UCL)</span>
+                <span id="ucl_r" class="font-mono font-medium text-gray-900"
+                  >N/A</span
+                >
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600">Lower Control Limit (LCL)</span>
+                <span id="lcl_r" class="font-mono font-medium text-gray-900"
+                  >N/A</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Process Parameters -->
+        <h3
+          class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4"
+        >
+          Calculated Parameters (n=<span id="n_val">N/A</span>)
+        </h3>
+        <div
+          id="parameterSummary"
+          class="grid grid-cols-2 md:grid-cols-4 gap-4"
+        >
+          <div class="p-3 bg-gray-50 rounded border border-gray-100">
+            <span class="block text-xs text-gray-500 mb-1">Grand Avg (X̄̄)</span>
+            <span
+              id="grand_x_bar_val"
+              class="block font-mono font-semibold text-gray-900">N/A</span
+            >
+          </div>
+          <div class="p-3 bg-gray-50 rounded border border-gray-100">
+            <span class="block text-xs text-gray-500 mb-1">Avg Range (R̄)</span>
+            <span
+              id="average_r_val"
+              class="block font-mono font-semibold text-gray-900">N/A</span
+            >
+          </div>
+          <div class="p-3 bg-gray-50 rounded border border-gray-100">
+            <span class="block text-xs text-gray-500 mb-1">Constant A2</span>
+            <span
+              id="a2_val"
+              class="block font-mono font-semibold text-gray-900">N/A</span
+            >
+          </div>
+          <div class="p-3 bg-gray-50 rounded border border-gray-100">
+            <span class="block text-xs text-gray-500 mb-1">Constants D3/D4</span
+            >
+            <div class="flex space-x-2 font-mono font-semibold text-gray-900">
+              <span id="d3_val">N/A</span>
+              <span class="text-gray-400">/</span>
+              <span id="d4_val">N/A</span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          id="errorMessages"
+          class="mt-6 p-4 hidden bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm"
+        >
+        </div>
+      </div>
+    </div>
+
+    <!-- Individual Subgroup Data Table Section (Output) -->
+    <div id="dataDisplayTable" class="mt-10">
+      <!-- Output table will be injected here -->
+    </div>
+
+    <!-- Charts Section -->
+    <div class="mt-8 space-y-8">
+      <!-- X-Bar Chart -->
+      <div class="p-6 bg-white rounded-xl border border-gray-200">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold text-gray-900">Average (X-bar) Chart</h2>
+          <button
+            onclick="downloadChart('xBarChart', 'X_bar_Chart')"
+            title="Download Chart"
+            class="icon-button"
+          >
+            <!-- Download Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <div class="relative h-[300px] md:h-[400px] w-full">
+          <canvas id="xBarChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Range Chart -->
+      <div class="p-6 bg-white rounded-xl border border-gray-200">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold text-gray-900">Range (R) Chart</h2>
+          <button
+            onclick="downloadChart('rChart', 'R_Chart')"
+            title="Download Chart"
+            class="icon-button"
+          >
+            <!-- Download Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <div class="relative h-[300px] md:h-[400px] w-full">
+          <canvas id="rChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // IIFE to guarantee scope and immediate execution
+  (function () {
+    let xBarChartInstance = null;
+    let rChartInstance = null;
+    let numRows = 5;
+    let numCols = 4;
+    let allSubgroupData = [];
+
+    // SPC Constants
+    const spcConstants = {
+      2: { A2: 1.88, D3: 0.0, D4: 3.267 },
+      3: { A2: 1.023, D3: 0.0, D4: 2.575 },
+      4: { A2: 0.729, D3: 0.0, D4: 2.282 },
+      5: { A2: 0.577, D3: 0.0, D4: 2.115 },
+      6: { A2: 0.483, D3: 0.0, D4: 2.004 },
+      7: { A2: 0.419, D3: 0.076, D4: 1.924 },
+      8: { A2: 0.373, D3: 0.136, D4: 1.864 },
+      9: { A2: 0.337, D3: 0.184, D4: 1.816 },
+      10: { A2: 0.308, D3: 0.223, D4: 1.777 },
+    };
+
+    window.displayError = function (message) {
+      const errorDiv = document.getElementById("errorMessages");
+      errorDiv.textContent = message;
+      errorDiv.classList.remove("hidden");
+
+      const fields = [
+        "cl_x_bar",
+        "ucl_x_bar",
+        "lcl_x_bar",
+        "cl_r",
+        "ucl_r",
+        "lcl_r",
+        "n_val",
+        "grand_x_bar_val",
+        "average_r_val",
+        "a2_val",
+        "d3_val",
+        "d4_val",
+      ];
+      fields.forEach((id) => {
+        const element = document.getElementById(id);
+        if (element) element.textContent = "N/A";
+      });
+      document.getElementById("dataDisplayTable").innerHTML = "";
+    };
+
+    window.addRow = function (count = 1) {
+      const currentCols = numCols;
+      const body = document.getElementById("inputGridBody");
+      for (let i = 0; i < count; i++) {
+        const newRowIndex = numRows + i;
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-gray-50";
+
+        const tdLabel = document.createElement("td");
+        tdLabel.className =
+          "bg-gray-50 sticky left-0 text-sm text-center border-r border-gray-200 text-gray-500 font-mono";
+        tdLabel.textContent = newRowIndex + 1;
+        tr.appendChild(tdLabel);
+
+        for (let j = 0; j < currentCols; j++) {
+          const td = document.createElement("td");
+          td.className = "min-w-[70px]";
+          const input = document.createElement("input");
+          input.type = "number";
+          input.step = "any";
+          input.className = "data-input-cell text-sm text-gray-700";
+          input.id = `input-${newRowIndex}-${j}`;
+          input.setAttribute("data-row", newRowIndex);
+          input.setAttribute("data-col", j);
+
+          if (newRowIndex === 0 && j === 0) {
+            input.addEventListener("paste", handleSpreadsheetPaste);
+          }
+          td.appendChild(input);
+          tr.appendChild(td);
+        }
+        body.appendChild(tr);
+      }
+      numRows += count;
+    };
+
+    window.addColumn = function (count = 1) {
+      const body = document.getElementById("inputGridBody");
+      const header = document.getElementById("inputGridHeader");
+      const currentRows = body.children.length;
+
+      for (let k = 0; k < count; k++) {
+        const newColIndex = numCols + k;
+
+        // Update Header
+        const th = document.createElement("th");
+        th.className =
+          "sticky top-0 bg-gray-50 px-2 py-3 text-center text-xs font-semibold text-gray-500 min-w-[70px] border-b border-gray-200";
+        th.textContent = `X${newColIndex + 1}`;
+        header.appendChild(th);
+
+        // Update Rows
+        for (let i = 0; i < currentRows; i++) {
+          const tr = body.children[i];
+          const td = document.createElement("td");
+          td.className = "min-w-[70px]";
+          const input = document.createElement("input");
+          input.type = "number";
+          input.step = "any";
+          input.className = "data-input-cell text-sm text-gray-700";
+          input.id = `input-${i}-${newColIndex}`;
+          input.setAttribute("data-row", i);
+          input.setAttribute("data-col", newColIndex);
+          td.appendChild(input);
+          tr.appendChild(td);
+        }
+      }
+      numCols += count;
+      document.getElementById("n_val_input").textContent = numCols;
+    };
+
+    window.copyDataTable = function () {
+      const data = allSubgroupData;
+      const copyBtn = document.getElementById("copyDataBtn");
+
+      if (!data || data.length === 0) {
+        window.displayError("No data to copy. Please run the analysis first.");
+        return;
+      }
+
+      const subgroupSize = data[0].rawValues.length;
+      let tsvContent = "Subgroup\t";
+
+      // 1. Build Header Row
+      for (let i = 1; i <= subgroupSize; i++) {
+        tsvContent += `X${i}\t`;
+      }
+      tsvContent += "X-bar\tRange (R)\n";
+
+      // 2. Build Data Rows
+      data.forEach((item, index) => {
+        tsvContent += `${index + 1}\t`;
+
+        // Raw values
+        for (let i = 0; i < subgroupSize; i++) {
+          const val = !isNaN(item.rawValues[i])
+            ? item.rawValues[i].toFixed(4)
+            : "";
+          tsvContent += `${val}\t`;
+        }
+
+        // Calculated values
+        tsvContent += `${item.xBar.toFixed(4)}\t`;
+        tsvContent += `${item.range.toFixed(4)}\n`;
+      });
+
+      // 3. Copy to Clipboard
+      const textarea = document.createElement("textarea");
+      textarea.value = tsvContent.trim();
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      let success = false;
+      try {
+        success = document.execCommand("copy");
+      } catch (err) {
+        console.error("Failed to copy data: ", err);
+      }
+
+      document.body.removeChild(textarea);
+
+      // 4. Provide Feedback
+      if (success && copyBtn) {
+        copyBtn.title = "Copied!";
+        copyBtn.classList.add("text-green-600");
+        copyBtn.classList.remove("text-indigo-600");
+
+        // Revert button color and title after 2 seconds
+        setTimeout(() => {
+          copyBtn.title = "Copy Data";
+          copyBtn.classList.remove("text-green-600");
+          copyBtn.classList.add("text-indigo-600");
+        }, 2000);
+      } else {
+        window.displayError(
+          "Failed to copy data to clipboard. Your browser may not support the copy function."
+        );
+      }
+    };
+
+    window.downloadChart = function (canvasId, filename) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) {
+        window.displayError(`Chart element with ID ${canvasId} not found.`);
+        return;
+      }
+      const imageURL = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = imageURL;
+      link.download = filename + ".png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    window.calculateAndChart = function () {
+      try {
+        // 1. Clear previous errors and charts
+        document.getElementById("errorMessages").classList.add("hidden");
+        if (xBarChartInstance) xBarChartInstance.destroy();
+        if (rChartInstance) rChartInstance.destroy();
+        document.getElementById("dataDisplayTable").innerHTML = "";
+        allSubgroupData = []; // Clear global data array
+
+        const rawSubgroups = [];
+        let effectiveNumCols = 0;
+
+        // 2. Read data from the input grid
+        for (let i = 0; i < numRows; i++) {
+          const subgroup = [];
+          let rowHasData = false;
+          for (let j = 0; j < numCols; j++) {
+            const input = document.getElementById(`input-${i}-${j}`);
+            if (input && input.value !== "") {
+              const value = parseFloat(input.value);
+              if (!isNaN(value)) {
+                subgroup.push(value);
+                rowHasData = true;
+                effectiveNumCols = Math.max(effectiveNumCols, j + 1);
+              }
+            }
+          }
+          if (rowHasData) {
+            // Pad the subgroup array up to the determined number of columns for consistency
+            while (subgroup.length < effectiveNumCols) {
+              subgroup.push(NaN);
+            }
+            rawSubgroups.push(subgroup);
+          }
+        }
+
+        // Final validation checks
+        const subgroups = rawSubgroups.filter(
+          (sg) => sg.length > 0 && !sg.every(isNaN)
+        );
+
+        if (subgroups.length < 2) {
+          window.displayError(
+            "Please enter at least two subgroups with valid data (Subgroups count must be 2 or more)."
+          );
+          return;
+        }
+
+        let subgroupSize = effectiveNumCols;
+
+        // Re-validate that all active subgroups have the same size (excluding NaNs for empty cells)
+        const validSubgroups = subgroups.map((sg) =>
+          sg.filter((v) => !isNaN(v))
+        );
+        subgroupSize = validSubgroups[0].length;
+
+        for (const sg of validSubgroups) {
+          if (sg.length !== subgroupSize) {
+            window.displayError(
+              `Subgroup size mismatch: Please ensure all subgroups have the same number of measurements (n=${subgroupSize}).`
+            );
+            return;
+          }
+        }
+
+        if (subgroupSize < 2 || subgroupSize > 10) {
+          window.displayError(
+            `Subgroup size (n=${subgroupSize}) is outside the supported range (2-10) for X-bar and R charts.`
+          );
+          return;
+        }
+
+        // 3. Calculate X-bar and Range for each valid subgroup
+        const xBarValues = [];
+        const rValues = [];
+        const allSubgroupDataTemp = []; // Temporary array
+
+        for (const values of validSubgroups) {
+          // Calculate X-bar (Average)
+          const sum = values.reduce((a, b) => a + b, 0);
+          const xBar = sum / values.length;
+          xBarValues.push(xBar);
+
+          // Calculate Range (R)
+          const min = Math.min(...values);
+          const max = Math.max(...values);
+          const range = max - min;
+          rValues.push(range);
+
+          allSubgroupDataTemp.push({
+            rawValues: values,
+            xBar: xBar,
+            range: range,
+          });
+        }
+
+        // Set global data array for copying
+        allSubgroupData = allSubgroupDataTemp;
+
+        // 4. Calculate grand averages (Center Lines)
+        const grandXBar =
+          xBarValues.reduce((a, b) => a + b, 0) / xBarValues.length;
+        const averageR = rValues.reduce((a, b) => a + b, 0) / rValues.length;
+
+        // 5. Get SPC Constants
+        const constants = spcConstants[subgroupSize];
+        const A2 = constants.A2;
+        const D3 = constants.D3;
+        const D4 = constants.D4;
+
+        // 6. Calculate Control Limits
+        const uclXBar = grandXBar + A2 * averageR;
+        const lclXBar = grandXBar - A2 * averageR;
+
+        const uclR = D4 * averageR;
+        const lclR = D3 * averageR;
+
+        // 7. Prepare Chart Data and Update Summaries
+        const numSubgroups = xBarValues.length;
+        const labels = Array.from(
+          { length: numSubgroups },
+          (_, i) => `SG ${i + 1}`
+        );
+
+        const clXBarData = Array(numSubgroups).fill(grandXBar);
+        const uclXBarData = Array(numSubgroups).fill(uclXBar);
+        const lclXBarData = Array(numSubgroups).fill(lclXBar);
+
+        const clRData = Array(numSubgroups).fill(averageR);
+        const uclRData = Array(numSubgroups).fill(uclR);
+        const lclRData = Array(numSubgroups).fill(lclR);
+
+        document.getElementById("cl_x_bar").textContent = grandXBar.toFixed(4);
+        document.getElementById("ucl_x_bar").textContent = uclXBar.toFixed(4);
+        document.getElementById("lcl_x_bar").textContent = Math.max(
+          0,
+          lclXBar
+        ).toFixed(4);
+
+        document.getElementById("cl_r").textContent = averageR.toFixed(4);
+        document.getElementById("ucl_r").textContent = uclR.toFixed(4);
+        document.getElementById("lcl_r").textContent = Math.max(
+          0,
+          lclR
+        ).toFixed(4);
+
+        document.getElementById("n_val").textContent = subgroupSize;
+        document.getElementById("grand_x_bar_val").textContent =
+          grandXBar.toFixed(4);
+        document.getElementById("average_r_val").textContent =
+          averageR.toFixed(4);
+        document.getElementById("a2_val").textContent = A2.toFixed(3);
+        document.getElementById("d3_val").textContent = D3.toFixed(3);
+        document.getElementById("d4_val").textContent = D4.toFixed(3);
+
+        // 8. Generate Data Table
+        generateDataTable(allSubgroupData, subgroupSize);
+
+        // 9. Generate Charts
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = "#6b7280";
+
+        // --- X-Bar Chart ---
+        const ctxXBar = document.getElementById("xBarChart").getContext("2d");
+        if (xBarChartInstance) xBarChartInstance.destroy();
+        xBarChartInstance = new Chart(ctxXBar, {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "X-bar",
+                data: xBarValues,
+                borderColor: "rgb(79, 70, 229)",
+                backgroundColor: "rgba(79, 70, 229, 0.1)",
+                borderWidth: 2,
+                pointRadius: 4,
+                pointBackgroundColor: "white",
+                pointBorderColor: "rgb(79, 70, 229)",
+                pointBorderWidth: 2,
+                tension: 0.1,
+                fill: false,
+              },
+              {
+                label: "Center Line (CL)",
+                data: clXBarData,
+                borderColor: "rgb(5, 150, 105)",
+                borderWidth: 2,
+                borderDash: [5, 5],
+                pointRadius: 0,
+                tension: 0,
+                fill: false,
+              },
+              {
+                label: "UCL",
+                data: uclXBarData,
+                borderColor: "rgb(220, 38, 38)",
+                borderWidth: 1.5,
+                pointRadius: 0,
+                tension: 0,
+                fill: false,
+              },
+              {
+                label: "LCL",
+                data: lclXBarData,
+                borderColor: "rgb(29, 78, 216)",
+                borderWidth: 1.5,
+                pointRadius: 0,
+                tension: 0,
+                fill: false,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              mode: "index",
+              intersect: false,
+            },
+            scales: {
+              y: {
+                title: { display: false },
+                grid: { color: "#f3f4f6" },
+              },
+              x: {
+                grid: { display: false },
+              },
+            },
+            plugins: {
+              legend: {
+                position: "top",
+                labels: { usePointStyle: true, boxWidth: 6 },
+              },
+            },
+          },
+        });
+
+        // --- R Chart ---
+        const ctxR = document.getElementById("rChart").getContext("2d");
+        if (rChartInstance) rChartInstance.destroy();
+        rChartInstance = new Chart(ctxR, {
+          type: "line",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Range (R)",
+                data: rValues,
+                borderColor: "rgb(79, 70, 229)",
+                backgroundColor: "rgba(79, 70, 229, 0.1)",
+                borderWidth: 2,
+                pointRadius: 4,
+                pointBackgroundColor: "white",
+                pointBorderColor: "rgb(79, 70, 229)",
+                pointBorderWidth: 2,
+                tension: 0.1,
+                fill: false,
+              },
+              {
+                label: "Center Line (CL)",
+                data: clRData,
+                borderColor: "rgb(5, 150, 105)",
+                borderWidth: 2,
+                borderDash: [5, 5],
+                pointRadius: 0,
+                tension: 0,
+                fill: false,
+              },
+              {
+                label: "UCL",
+                data: uclRData,
+                borderColor: "rgb(220, 38, 38)",
+                borderWidth: 1.5,
+                pointRadius: 0,
+                tension: 0,
+                fill: false,
+              },
+              {
+                label: "LCL",
+                data: lclRData,
+                borderColor: "rgb(29, 78, 216)",
+                borderWidth: 1.5,
+                pointRadius: 0,
+                tension: 0,
+                fill: false,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: { min: 0, grid: { color: "#f3f4f6" } },
+              x: { grid: { display: false } },
+            },
+            plugins: {
+              legend: {
+                position: "top",
+                labels: { usePointStyle: true, boxWidth: 6 },
+              },
+            },
+          },
+        });
+      } catch (e) {
+        console.error(e);
+        window.displayError(
+          "An unexpected error occurred during calculation. Check your data format. Error: " +
+            e.message
+        );
+      }
+    };
+
+    // --- 2. Helper Functions (Internal to IIFE) ---
+
+    /** Renders the input grid table. */
+    function renderInputGrid() {
+      const header = document.getElementById("inputGridHeader");
+      const body = document.getElementById("inputGridBody");
+      header.innerHTML =
+        '<th class="sticky top-0 bg-gray-50 px-2 py-3 text-center text-xs font-semibold text-gray-500 w-[70px] border-b border-gray-200 border-r">S.G.</th>';
+      body.innerHTML = "";
+
+      // 1. Render Columns (X1, X2, ...)
+      for (let j = 0; j < numCols; j++) {
+        const th = document.createElement("th");
+        th.className =
+          "sticky top-0 bg-gray-50 px-2 py-3 text-center text-xs font-semibold text-gray-500 min-w-[70px] border-b border-gray-200";
+        th.textContent = `X${j + 1}`;
+        header.appendChild(th);
+      }
+
+      // 2. Render Rows
+      for (let i = 0; i < numRows; i++) {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-gray-50";
+
+        // Subgroup label cell
+        const tdLabel = document.createElement("td");
+        tdLabel.className =
+          "bg-gray-50 sticky left-0 text-sm text-center border-r border-gray-200 text-gray-500 font-mono";
+        tdLabel.textContent = i + 1;
+        tr.appendChild(tdLabel);
+
+        // Data input cells
+        for (let j = 0; j < numCols; j++) {
+          const td = document.createElement("td");
+          td.className = "min-w-[70px]";
+          const input = document.createElement("input");
+          input.type = "number";
+          input.step = "any";
+          input.className = "data-input-cell text-sm text-gray-700";
+          input.id = `input-${i}-${j}`;
+          input.setAttribute("data-row", i);
+          input.setAttribute("data-col", j);
+
+          // Add custom paste handler to the first cell for spreadsheet data ingestion
+          if (i === 0 && j === 0) {
+            input.addEventListener("paste", handleSpreadsheetPaste);
+          }
+          td.appendChild(input);
+          tr.appendChild(td);
+        }
+        body.appendChild(tr);
+      }
+      // Update N display
+      document.getElementById("n_val_input").textContent = numCols;
+    }
+
+    /** Handles pasting data from a spreadsheet into the first cell. */
+    function handleSpreadsheetPaste(event) {
+      // Prevent default behavior (pasting all data into one cell)
+      event.preventDefault();
+
+      // Get clipboard data
+      const clipboardData = event.clipboardData || window.clipboardData;
+      const pastedText = clipboardData.getData("Text");
+
+      // Split into rows (by newline) and then columns (by tab, comma, or space)
+      const rows = pastedText.trim().split(/\r\n|\n|\r/);
+      const parsedData = rows.map((row) =>
+        row.split(/\t|,|\s+/).map((val) => val.trim())
+      );
+
+      if (parsedData.length === 0 || parsedData[0].length === 0) return;
+
+      // Determine dimensions of pasted data
+      const pastedRows = parsedData.length;
+      const pastedCols = Math.max(...parsedData.map((row) => row.length));
+
+      // Dynamically add rows and columns if necessary
+      if (pastedRows > numRows) window.addRow(pastedRows - numRows);
+      if (pastedCols > numCols) window.addColumn(pastedCols - numCols);
+
+      // Insert data into the grid starting at (0, 0)
+      for (let i = 0; i < parsedData.length; i++) {
+        for (let j = 0; j < parsedData[i].length; j++) {
+          const value = parsedData[i][j];
+          if (value !== "") {
+            const targetRow =
+              parseInt(event.target.getAttribute("data-row")) + i;
+            const targetCol =
+              parseInt(event.target.getAttribute("data-col")) + j;
+            const targetInput = document.getElementById(
+              `input-${targetRow}-${targetCol}`
+            );
+
+            if (targetInput) {
+              targetInput.value = value;
+            }
+          }
+        }
+      }
+
+      // Calculate charts immediately after paste
+      window.calculateAndChart();
+    }
+
+    /** Generates and injects the HTML table displaying subgroup data, X-bar, and Range. */
+    function generateDataTable(data, n) {
+      const tableContainer = document.getElementById("dataDisplayTable");
+      tableContainer.innerHTML = "";
+
+      if (data.length === 0) return;
+
+      let tableHtml = `
+                <div class="p-8 bg-white rounded-xl border border-gray-200">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-900">Calculated Data Table</h2>
+                        <button onclick="copyDataTable()" id="copyDataBtn" title="Copy Data" class="icon-button-text-sm">
+                            <!-- Copy Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 4h4m-4 0v4m4-4V8m-8 8v-4m-4 4v-4m4 4h4m-4 0v4m4-4V8" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto rounded-lg border border-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/12">Subgroup</th>
+            `;
+
+      // Add columns for individual measurements (X1, X2, ...)
+      for (let i = 1; i <= n; i++) {
+        tableHtml += `<th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">X${i}</th>`;
+      }
+
+      // Add columns for calculated values
+      tableHtml += `
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-800 uppercase tracking-wider bg-yellow-50">X-bar</th>
+                                <th class="px-4 py-3 text-center text-xs font-medium text-gray-800 uppercase tracking-wider bg-purple-50">Range (R)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+            `;
+
+      // Add rows for data
+      data.forEach((item, index) => {
+        tableHtml += `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-2 whitespace-nowrap text-sm font-semibold text-gray-900 text-left">${index + 1}</td>
+                `;
+        // Raw values
+        for (let i = 0; i < n; i++) {
+          const displayValue = !isNaN(item.rawValues[i])
+            ? item.rawValues[i].toFixed(4)
+            : "";
+          tableHtml += `<td class="px-4 py-2 whitespace-nowrap text-sm text-gray-600 text-center font-mono">${displayValue}</td>`;
+        }
+
+        // Calculated values
+        tableHtml += `
+                    <td class="px-4 py-2 whitespace-nowrap text-sm font-bold text-yellow-700 text-center bg-yellow-50 font-mono">${item.xBar.toFixed(4)}</td>
+                    <td class="px-4 py-2 whitespace-nowrap text-sm font-bold text-purple-700 text-center bg-purple-50 font-mono">${item.range.toFixed(4)}</td>
+                </tr>
+                `;
+      });
+
+      tableHtml += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            `;
+
+      tableContainer.innerHTML = tableHtml;
+    }
+
+    // --- 3. Initialization ---
+    // Since we use client:load, the DOM should be ready enough to render the grid immediately.
+    renderInputGrid();
+  })();
+</script>
