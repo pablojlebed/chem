@@ -16,18 +16,22 @@
   ></script>
   <!-- Configure Tailwind for custom colors -->
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            "cl-line": "#059669", // Emerald Green (Center Line)
-            "ucl-line": "#dc2626", // Red (UCL)
-            "lcl-line": "#1d4ed8", // Blue (LCL)
-            "data-point": "#4f46e5", // Indigo (Data)
+    document.addEventListener("DOMContentLoaded", function () {
+      if (typeof window.tailwind !== "undefined") {
+        window.tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                "cl-line": "#059669", // Emerald Green (Center Line)
+                "ucl-line": "#dc2626", // Red (UCL)
+                "lcl-line": "#1d4ed8", // Blue (LCL)
+                "data-point": "#4f46e5", // Indigo (Data)
+              },
+            },
           },
-        },
-      },
-    };
+        };
+      }
+    });
   </script>
   <style>
     /* Apply 'Inter' font and base styles */
@@ -368,16 +372,35 @@
 </div>
 
 <script>
+  // Declare global window functions for TypeScript
+  declare global {
+    interface Window {
+      displayError: (message: string) => void;
+      addRow: (count?: number) => void;
+      addColumn: (count?: number) => void;
+      copyDataTable: () => void;
+      downloadChart: (canvasId: string, filename: string) => void;
+      calculateAndChart: () => void;
+    }
+    var Chart: any;
+  }
+
   // IIFE to guarantee scope and immediate execution
   (function () {
-    let xBarChartInstance = null;
-    let rChartInstance = null;
+    let xBarChartInstance: any = null;
+    let rChartInstance: any = null;
     let numRows = 5;
     let numCols = 4;
-    let allSubgroupData = [];
+    let allSubgroupData: Array<{
+      rawValues: number[];
+      xBar: number;
+      range: number;
+    }> = [];
 
     // SPC Constants
-    const spcConstants = {
+    const spcConstants: {
+      [key: number]: { A2: number; D3: number; D4: number };
+    } = {
       2: { A2: 1.88, D3: 0.0, D4: 3.267 },
       3: { A2: 1.023, D3: 0.0, D4: 2.575 },
       4: { A2: 0.729, D3: 0.0, D4: 2.282 },
@@ -391,8 +414,10 @@
 
     window.displayError = function (message) {
       const errorDiv = document.getElementById("errorMessages");
-      errorDiv.textContent = message;
-      errorDiv.classList.remove("hidden");
+      if (errorDiv) {
+        errorDiv.textContent = message;
+        errorDiv.classList.remove("hidden");
+      }
 
       const fields = [
         "cl_x_bar",
@@ -412,7 +437,10 @@
         const element = document.getElementById(id);
         if (element) element.textContent = "N/A";
       });
-      document.getElementById("dataDisplayTable").innerHTML = "";
+      const dataDisplayTable = document.getElementById("dataDisplayTable");
+      if (dataDisplayTable) {
+        dataDisplayTable.innerHTML = "";
+      }
     };
 
     window.addRow = function (count = 1) {
@@ -426,7 +454,7 @@
         const tdLabel = document.createElement("td");
         tdLabel.className =
           "bg-gray-50 sticky left-0 text-sm text-center border-r border-gray-200 text-gray-500 font-mono";
-        tdLabel.textContent = newRowIndex + 1;
+        tdLabel.textContent = (newRowIndex + 1).toString();
         tr.appendChild(tdLabel);
 
         for (let j = 0; j < currentCols; j++) {
@@ -437,8 +465,8 @@
           input.step = "any";
           input.className = "data-input-cell text-sm text-gray-700";
           input.id = `input-${newRowIndex}-${j}`;
-          input.setAttribute("data-row", newRowIndex);
-          input.setAttribute("data-col", j);
+          input.setAttribute("data-row", String(newRowIndex));
+          input.setAttribute("data-col", String(j));
 
           if (newRowIndex === 0 && j === 0) {
             input.addEventListener("paste", handleSpreadsheetPaste);
@@ -446,7 +474,9 @@
           td.appendChild(input);
           tr.appendChild(td);
         }
-        body.appendChild(tr);
+        if (body) {
+          body.appendChild(tr);
+        }
       }
       numRows += count;
     };
@@ -454,7 +484,7 @@
     window.addColumn = function (count = 1) {
       const body = document.getElementById("inputGridBody");
       const header = document.getElementById("inputGridHeader");
-      const currentRows = body.children.length;
+      const currentRows = body ? body.children.length : 0;
 
       for (let k = 0; k < count; k++) {
         const newColIndex = numCols + k;
@@ -464,26 +494,31 @@
         th.className =
           "sticky top-0 bg-gray-50 px-2 py-3 text-center text-xs font-semibold text-gray-500 min-w-[70px] border-b border-gray-200";
         th.textContent = `X${newColIndex + 1}`;
-        header.appendChild(th);
+        if (header) {
+          header.appendChild(th);
+        }
 
         // Update Rows
-        for (let i = 0; i < currentRows; i++) {
-          const tr = body.children[i];
-          const td = document.createElement("td");
-          td.className = "min-w-[70px]";
-          const input = document.createElement("input");
-          input.type = "number";
-          input.step = "any";
-          input.className = "data-input-cell text-sm text-gray-700";
-          input.id = `input-${i}-${newColIndex}`;
-          input.setAttribute("data-row", i);
-          input.setAttribute("data-col", newColIndex);
-          td.appendChild(input);
-          tr.appendChild(td);
+        if (body) {
+          for (let i = 0; i < currentRows; i++) {
+            const tr = body.children[i];
+            const td = document.createElement("td");
+            td.className = "min-w-[70px]";
+            const input = document.createElement("input");
+            input.type = "number";
+            input.step = "any";
+            input.className = "data-input-cell text-sm text-gray-700";
+            input.id = `input-${i}-${newColIndex}`;
+            input.setAttribute("data-row", String(i));
+            input.setAttribute("data-col", String(newColIndex));
+            td.appendChild(input);
+            tr.appendChild(td);
+          }
         }
       }
       numCols += count;
-      document.getElementById("n_val_input").textContent = numCols;
+      const nValInput = document.getElementById("n_val_input");
+      if (nValInput) nValInput.textContent = numCols.toString();
     };
 
     window.copyDataTable = function () {
@@ -556,7 +591,9 @@
     };
 
     window.downloadChart = function (canvasId, filename) {
-      const canvas = document.getElementById(canvasId);
+      const canvas = document.getElementById(
+        canvasId
+      ) as HTMLCanvasElement | null;
       if (!canvas) {
         window.displayError(`Chart element with ID ${canvasId} not found.`);
         return;
@@ -573,10 +610,12 @@
     window.calculateAndChart = function () {
       try {
         // 1. Clear previous errors and charts
-        document.getElementById("errorMessages").classList.add("hidden");
+        const errorDiv = document.getElementById("errorMessages");
+        if (errorDiv) errorDiv.classList.add("hidden");
         if (xBarChartInstance) xBarChartInstance.destroy();
         if (rChartInstance) rChartInstance.destroy();
-        document.getElementById("dataDisplayTable").innerHTML = "";
+        const dataDisplayTable = document.getElementById("dataDisplayTable");
+        if (dataDisplayTable) dataDisplayTable.innerHTML = "";
         allSubgroupData = []; // Clear global data array
 
         const rawSubgroups = [];
@@ -588,8 +627,8 @@
           let rowHasData = false;
           for (let j = 0; j < numCols; j++) {
             const input = document.getElementById(`input-${i}-${j}`);
-            if (input && input.value !== "") {
-              const value = parseFloat(input.value);
+            if (input && (input as HTMLInputElement).value !== "") {
+              const value = parseFloat((input as HTMLInputElement).value);
               if (!isNaN(value)) {
                 subgroup.push(value);
                 rowHasData = true;
@@ -702,28 +741,41 @@
         const uclRData = Array(numSubgroups).fill(uclR);
         const lclRData = Array(numSubgroups).fill(lclR);
 
-        document.getElementById("cl_x_bar").textContent = grandXBar.toFixed(4);
-        document.getElementById("ucl_x_bar").textContent = uclXBar.toFixed(4);
-        document.getElementById("lcl_x_bar").textContent = Math.max(
-          0,
-          lclXBar
-        ).toFixed(4);
+        const clXBarEl = document.getElementById("cl_x_bar");
+        if (clXBarEl) clXBarEl.textContent = grandXBar.toFixed(4);
 
-        document.getElementById("cl_r").textContent = averageR.toFixed(4);
-        document.getElementById("ucl_r").textContent = uclR.toFixed(4);
-        document.getElementById("lcl_r").textContent = Math.max(
-          0,
-          lclR
-        ).toFixed(4);
+        const uclXBarEl = document.getElementById("ucl_x_bar");
+        if (uclXBarEl) uclXBarEl.textContent = uclXBar.toFixed(4);
 
-        document.getElementById("n_val").textContent = subgroupSize;
-        document.getElementById("grand_x_bar_val").textContent =
-          grandXBar.toFixed(4);
-        document.getElementById("average_r_val").textContent =
-          averageR.toFixed(4);
-        document.getElementById("a2_val").textContent = A2.toFixed(3);
-        document.getElementById("d3_val").textContent = D3.toFixed(3);
-        document.getElementById("d4_val").textContent = D4.toFixed(3);
+        const lclXBarEl = document.getElementById("lcl_x_bar");
+        if (lclXBarEl) lclXBarEl.textContent = Math.max(0, lclXBar).toFixed(4);
+
+        const clREl = document.getElementById("cl_r");
+        if (clREl) clREl.textContent = averageR.toFixed(4);
+
+        const uclREl = document.getElementById("ucl_r");
+        if (uclREl) uclREl.textContent = uclR.toFixed(4);
+
+        const lclREl = document.getElementById("lcl_r");
+        if (lclREl) lclREl.textContent = Math.max(0, lclR).toFixed(4);
+
+        const nValEl = document.getElementById("n_val");
+        if (nValEl) nValEl.textContent = subgroupSize.toString();
+
+        const grandXBarValEl = document.getElementById("grand_x_bar_val");
+        if (grandXBarValEl) grandXBarValEl.textContent = grandXBar.toFixed(4);
+
+        const averageRValEl = document.getElementById("average_r_val");
+        if (averageRValEl) averageRValEl.textContent = averageR.toFixed(4);
+
+        const a2ValEl = document.getElementById("a2_val");
+        if (a2ValEl) a2ValEl.textContent = A2.toFixed(3);
+
+        const d3ValEl = document.getElementById("d3_val");
+        if (d3ValEl) d3ValEl.textContent = D3.toFixed(3);
+
+        const d4ValEl = document.getElementById("d4_val");
+        if (d4ValEl) d4ValEl.textContent = D4.toFixed(3);
 
         // 8. Generate Data Table
         generateDataTable(allSubgroupData, subgroupSize);
@@ -809,7 +861,12 @@
         });
 
         // --- R Chart ---
-        const ctxR = document.getElementById("rChart").getContext("2d");
+        const rChartElement = document.getElementById("rChart") as HTMLCanvasElement;
+        if (!rChartElement) {
+          window.displayError("Range chart element not found.");
+          return;
+        }
+        const ctxR = rChartElement.getContext("2d");
         if (rChartInstance) rChartInstance.destroy();
         rChartInstance = new Chart(ctxR, {
           type: "line",
@@ -889,6 +946,7 @@
     function renderInputGrid() {
       const header = document.getElementById("inputGridHeader");
       const body = document.getElementById("inputGridBody");
+      if (!header || !body) return;
       header.innerHTML =
         '<th class="sticky top-0 bg-gray-50 px-2 py-3 text-center text-xs font-semibold text-gray-500 w-[70px] border-b border-gray-200 border-r">S.G.</th>';
       body.innerHTML = "";
@@ -911,7 +969,7 @@
         const tdLabel = document.createElement("td");
         tdLabel.className =
           "bg-gray-50 sticky left-0 text-sm text-center border-r border-gray-200 text-gray-500 font-mono";
-        tdLabel.textContent = i + 1;
+        tdLabel.textContent = (i + 1).toString();
         tr.appendChild(tdLabel);
 
         // Data input cells
@@ -923,8 +981,8 @@
           input.step = "any";
           input.className = "data-input-cell text-sm text-gray-700";
           input.id = `input-${i}-${j}`;
-          input.setAttribute("data-row", i);
-          input.setAttribute("data-col", j);
+          input.setAttribute("data-row", String(i));
+          input.setAttribute("data-col", String(j));
 
           // Add custom paste handler to the first cell for spreadsheet data ingestion
           if (i === 0 && j === 0) {
@@ -940,7 +998,7 @@
     }
 
     /** Handles pasting data from a spreadsheet into the first cell. */
-    function handleSpreadsheetPaste(event) {
+    function handleSpreadsheetPaste(event: ClipboardEvent) {
       // Prevent default behavior (pasting all data into one cell)
       event.preventDefault();
 
@@ -950,7 +1008,7 @@
 
       // Split into rows (by newline) and then columns (by tab, comma, or space)
       const rows = pastedText.trim().split(/\r\n|\n|\r/);
-      const parsedData = rows.map((row) =>
+      const parsedData = rows.map((row: string) =>
         row.split(/\t|,|\s+/).map((val) => val.trim())
       );
 
@@ -965,20 +1023,21 @@
       if (pastedCols > numCols) window.addColumn(pastedCols - numCols);
 
       // Insert data into the grid starting at (0, 0)
+      const targetElement = event.target as HTMLInputElement;
       for (let i = 0; i < parsedData.length; i++) {
         for (let j = 0; j < parsedData[i].length; j++) {
           const value = parsedData[i][j];
           if (value !== "") {
             const targetRow =
-              parseInt(event.target.getAttribute("data-row")) + i;
+              parseInt(targetElement.getAttribute("data-row") || "0") + i;
             const targetCol =
-              parseInt(event.target.getAttribute("data-col")) + j;
+              parseInt(targetElement.getAttribute("data-col") || "0") + j;
             const targetInput = document.getElementById(
               `input-${targetRow}-${targetCol}`
             );
 
             if (targetInput) {
-              targetInput.value = value;
+              (targetInput as HTMLInputElement).value = value;
             }
           }
         }
@@ -989,8 +1048,12 @@
     }
 
     /** Generates and injects the HTML table displaying subgroup data, X-bar, and Range. */
-    function generateDataTable(data, n) {
+    function generateDataTable(
+      data: Array<{ rawValues: number[]; xBar: number; range: number }>,
+      n: number
+    ) {
       const tableContainer = document.getElementById("dataDisplayTable");
+      if (!tableContainer) return;
       tableContainer.innerHTML = "";
 
       if (data.length === 0) return;
