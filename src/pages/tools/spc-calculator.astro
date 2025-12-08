@@ -10,14 +10,7 @@ import SPCChart from "../../components/SPCChart.astro";
 <BaseLayout title="SPC Control Chart Generator - The Lab Guy">
   <main class="py-12 lg:px-8 min-h-screen bg-gray-50">
     <div>
-      <!-- 
-                CRITICAL: The 'client:only="true"' directive is mandatory for this component.
-                It tells Astro to skip rendering on the server and load the component
-                (including all its JavaScript) exclusively on the client (browser).
-                This is necessary because the component relies heavily on browser APIs
-                like Chart.js and complex DOM manipulation.
-            -->
-      <SPCChart client:load="true" />
+      <SPCChart client:load />
     </div>
   </main>
 </BaseLayout>
