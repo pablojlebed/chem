@@ -439,6 +439,7 @@
 
     <!-- Client-Side JavaScript Logic -->
     <script is:inline>
+      import { database } from "../utils/qqq-database";
       (function () {
         // --- CONFIGURATION ---
         const colors = {
@@ -453,83 +454,6 @@
         let width, height;
         const resolution_sigma = 0.05;
         let isMSMSMode = false;
-
-        // --- DATABASE ---
-        /* kedFactor: 0-1 (1 = removed easily by size)
-           reactionFactor: 0-1 (1 = removed easily by O2 chemistry)
-           productShift: Mass shift for O2 reaction in MS/MS mode (e.g., +16 for M+ -> MO+)
-        */
-        const database = {
-          "56": {
-            // Analyte: 56Fe+ (Precursor)
-            analyte: {
-              name: "56Fe+",
-              mass: 56.0,
-              kedLoss: 0.05,
-              rxnLoss: 0.95,
-              productShift: 16.0,
-            }, // Fe reacts with O2 -> FeO (mass 72)
-            interferents: [
-              {
-                name: "40Ar16O+",
-                mass: 55.95,
-                default: 500000,
-                kedFactor: 0.8,
-                reactionFactor: 0.1,
-                productShift: 0.0,
-              },
-            ],
-          },
-          "75": {
-            // Analyte: 75As+ (Precursor)
-            analyte: {
-              name: "75As+",
-              mass: 75.0,
-              kedLoss: 0.05,
-              rxnLoss: 0.9,
-              productShift: 16.0,
-            }, // As reacts -> AsO (mass 91)
-            interferents: [
-              {
-                name: "40Ar35Cl+",
-                mass: 74.95,
-                default: 200000,
-                kedFactor: 0.85,
-                reactionFactor: 0.05,
-                productShift: 0.0,
-              },
-            ],
-          },
-          // SHOWCASE SCENARIO
-          "78": {
-            // Analyte: 78Se+ (Precursor)
-            analyte: {
-              name: "78Se+",
-              mass: 78.0,
-              kedLoss: 0.05,
-              rxnLoss: 0.05, // Se is relatively inert, but we force reaction in MS/MS
-              productShift: 16.0, // Se reacts with O2 -> SeO+ (mass 94)
-            },
-            interferents: [
-              {
-                name: "40Ar38Ar+ (Argon Dimer)",
-                mass: 78.05,
-                default: 400000,
-                kedFactor: 0.95, // KED is excellent
-                reactionFactor: 0.0, // Inert noble gas
-                productShift: 0.0, // Remains at precursor mass
-              },
-              {
-                name: "156Gd++ (Doubly Charged)",
-                mass: 77.95,
-                default: 150000,
-                kedFactor: 0.1, // KED fails
-                reactionFactor: 0.95, // Highly reactive metal, O2 removes/shifts easily
-                productShift: 16.0, // Assume it forms GdO++ (mass 94) or is removed. For MS/MS complexity, let's allow it to shift to show potential issues.
-              },
-            ],
-          },
-        };
 
         // --- UI MODE TOGGLE ---
 
