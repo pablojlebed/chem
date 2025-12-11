@@ -1,12 +1,12 @@
 ---
 // src/pages/tech-notes.astro
 import { getCollection } from "astro:content";
-import BaseLayout from "../layouts/BaseLayout.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
 
 const allNotes = await getCollection("notes");
 
 const sortedNotes = allNotes.sort(
-  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
 );
 
 const formatDate = (date: Date) => {

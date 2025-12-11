@@ -1,7 +1,7 @@
 ---
 // Astro Component Frontmatter: No server-side logic needed for this pure client-side component.
 // We are using CDN links for external dependencies (Tailwind, D3, FontAwesome).
-import { database } from "../utils/qqq-database.ts";
+import { database } from "@features/simulator/data/qqq-database.ts";
 ---
 
 <!doctype html>
@@ -270,7 +270,9 @@ import { database } from "../utils/qqq-database.ts";
       <p class="text-red-700 font-bold text-sm">
         Scenario not found in database.
       </p>
-      <p class="text-red-600 text-xs mt-1">Supported m/z: 56, 75, 78</p>
+      <p class="text-red-600 text-xs mt-1">
+        Supported m/z: 51, 52, 56, 75, 78, 80, 114
+      </p>
     </div>
 
     <!-- Main Grid -->

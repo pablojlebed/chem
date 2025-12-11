@@ -1,7 +1,7 @@
 ---
 // src/pages/tech-notes/[slug].astro
 import { getCollection } from "astro:content";
-import MarkdownLayout from "../../layouts/MarkdownLayout.astro";
+import MarkdownLayout from "@layouts/MarkdownLayout.astro";
 
 export async function getStaticPaths() {
   const notes = await getCollection("notes");

@@ -1,16 +1,16 @@
 ---
 // 1. Import your site's main layout component
 // NOTE: Adjust the path below if your layout component is located elsewhere
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
 
 // 2. Import the component you generated earlier
-import QQQSimulator from "../../components/qqq-simulator.astro";
+import QQQSimulator from "@features/simulator/QQQSimulator.astro";
 ---
 
 <BaseLayout title="ICP-MS QQQ Simulator - The Lab Guy">
   <main class="py-12 lg:px-8 min-h-screen bg-gray-50">
     <div>
-      <QQQSimulator client:load />
+      <QQQSimulator />
     </div>
   </main>
 </BaseLayout>
