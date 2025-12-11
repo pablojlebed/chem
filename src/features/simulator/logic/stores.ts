@@ -1,6 +1,6 @@
 // src/features/simulator/logic/stores.ts
 
-import { atom, map, get, derived } from 'nanostores';
+import { map, computed } from 'nanostores';
 import { database, type Scenario, type Analyte, type Interferent } from '../data/qqq-database';
 import { calculateFinalSignal, getStatusColor } from './calculations/calculations';
 
@@ -60,11 +60,11 @@ const initialScenario = database[initialKey];
 const initialAnalyte = initialScenario.analyte;
 const initialSettings = getDefaultSettings(initialAnalyte);
 
-export const simulatorState$ = atom<SimulatorState>({
+export const simulatorState$ = map<SimulatorState>({
     currentScenarioKey: initialKey,
     selectedAnalyte: initialAnalyte,
     interferentList: initialScenario.interferents,
-    userInterferentCounts: initialScenario.interferents.reduce((acc, i) => {
+    userInterferentCounts: initialScenario.interferents.reduce((acc: Record<string, number>, i: Interferent) => {
         acc[i.name] = i.default;
         return acc;
     }, {} as Record<string, number>),
@@ -73,9 +73,9 @@ export const simulatorState$ = atom<SimulatorState>({
 
 
 // 7. Derived Store: Triggers calculation on every state change
-export const calculatedResults$ = derived(
+export const calculatedResults$ = computed(
     simulatorState$,
-    ($state) => {
+    ($state: SimulatorState) => {
         const { selectedAnalyte, interferentList, userInterferentCounts, q3Mass, heFlow, reactionFlow, modeSettings } = $state;
 
         // Q1 is implicitly the precursor mass
@@ -109,7 +109,7 @@ export const calculatedResults$ = derived(
 // --- STATE MUTATION FUNCTIONS (Public API for Svelte components) ---
 
 export function selectScenario(key: string) {
-    const scenario = get(scenarios$)[key];
+    const scenario = scenarios$.get()[key];
 
     if (scenario) {
         const analyte = scenario.analyte;
@@ -120,7 +120,7 @@ export function selectScenario(key: string) {
             currentScenarioKey: key,
             selectedAnalyte: analyte,
             interferentList: scenario.interferents,
-            userInterferentCounts: scenario.interferents.reduce((acc, i) => {
+            userInterferentCounts: scenario.interferents.reduce((acc: Record<string, number>, i: Interferent) => {
                 acc[i.name] = i.default;
                 return acc;
             }, {} as Record<string, number>),
@@ -130,7 +130,7 @@ export function selectScenario(key: string) {
 }
 
 export function updateMode(mode: 'KED' | 'Reaction' | 'MS') {
-    const currentAnalyte = get(simulatorState$).selectedAnalyte;
+    const currentAnalyte = simulatorState$.get().selectedAnalyte;
 
     const gas: ModeSettings['gas'] =
         mode === 'KED' ? 'He' :
@@ -151,7 +151,7 @@ export function updateQ3Mass(mass: number) {
 }
 
 export function updateInterferentCount(name: string, count: number) {
-    const counts = get(simulatorState$).userInterferentCounts;
+    const counts = simulatorState$.get().userInterferentCounts;
     simulatorState$.setKey('userInterferentCounts', { ...counts, [name]: count });
 }
 
