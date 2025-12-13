@@ -69,36 +69,33 @@ const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
             id="navbar"
             class="hidden md:flex space-x-8 text-gray-200 font-semibold tracking-wide"
           >
-            <a
-              href="/"
-              class="hover:text-tron-red hover:drop-shadow-[0_0_5px_rgba(255,0,51,0.8)] transition-all duration-200"
-              >Home</a
-            >
-            <a
-              href="/services"
-              class="hover:text-tron-red hover:drop-shadow-[0_0_5px_rgba(255,0,51,0.8)] transition-all duration-200"
-              >Services</a
-            >
-            <a
-              href="/technical-notes"
-              class="hover:text-tron-red hover:drop-shadow-[0_0_5px_rgba(255,0,51,0.8)] transition-all duration-200"
-              >Technical Notes</a
-            >
-            <a
-              href="/tools"
-              class="text-tron-red drop-shadow-[0_0_5px_rgba(255,0,51,0.5)] border-b-2 border-tron-red"
-              >Tools</a
-            >
-            <a
-              href="/about"
-              class="hover:text-tron-red hover:drop-shadow-[0_0_5px_rgba(255,0,51,0.8)] transition-all duration-200"
-              >About</a
-            >
-            <a
-              href="/contact"
-              class="hover:text-tron-red hover:drop-shadow-[0_0_5px_rgba(255,0,51,0.8)] transition-all duration-200"
-              >Contact</a
-            >
+            {
+              [
+                { href: "/", label: "Home" },
+                { href: "/services", label: "Services" },
+                { href: "/technical-notes", label: "Technical Notes" },
+                { href: "/tools", label: "Tools" },
+                { href: "/about", label: "About" },
+                { href: "/contact", label: "Contact" },
+              ].map((link) => {
+                const isActive =
+                  link.href === "/"
+                    ? Astro.url.pathname === "/"
+                    : Astro.url.pathname.startsWith(link.href);
+                return (
+                  <a
+                    href={link.href}
+                    class:list={[
+                      isActive
+                        ? "text-tron-red drop-shadow-[0_0_5px_rgba(255,0,51,0.5)] border-b-2 border-tron-red"
+                        : "hover:text-tron-red hover:drop-shadow-[0_0_5px_rgba(255,0,51,0.8)] transition-all duration-200 border-b-2 border-transparent",
+                    ]}
+                  >
+                    {link.label}
+                  </a>
+                );
+              })
+            }
           </nav>
         </div>
 
@@ -107,35 +104,34 @@ const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
           id="mobile-nav"
           class="md:hidden hidden px-6 pb-6 space-y-4 text-gray-200 font-semibold tracking-wide bg-tron-dark-200 border-t border-tron-red/20"
         >
-          <a
-            href="/"
-            class="block hover:text-tron-red hover:bg-tron-red/10 p-2 rounded transition-colors duration-200"
-            >Home</a
-          >
-          <a
-            href="/services"
-            class="block hover:text-tron-red hover:bg-tron-red/10 p-2 rounded transition-colors duration-200"
-            >Services</a
-          >
-          <a
-            href="/technical-notes"
-            class="block hover:text-tron-red hover:bg-tron-red/10 p-2 rounded transition-colors duration-200"
-            >Technical Notes</a
-          >
-          <a
-            href="/tools"
-            class="block text-tron-red bg-tron-red/10 p-2 rounded">Tools</a
-          >
-          <a
-            href="/about"
-            class="block hover:text-tron-red hover:bg-tron-red/10 p-2 rounded transition-colors duration-200"
-            >About</a
-          >
-          <a
-            href="/contact"
-            class="block hover:text-tron-red hover:bg-tron-red/10 p-2 rounded transition-colors duration-200"
-            >Contact</a
-          >
+          {
+            [
+              { href: "/", label: "Home" },
+              { href: "/services", label: "Services" },
+              { href: "/technical-notes", label: "Technical Notes" },
+              { href: "/tools", label: "Tools" },
+              { href: "/about", label: "About" },
+              { href: "/contact", label: "Contact" },
+            ].map((link) => {
+              const isActive =
+                link.href === "/"
+                  ? Astro.url.pathname === "/"
+                  : Astro.url.pathname.startsWith(link.href);
+              return (
+                <a
+                  href={link.href}
+                  class:list={[
+                    "block p-2 rounded transition-colors duration-200",
+                    isActive
+                      ? "text-tron-red bg-tron-red/10"
+                      : "hover:text-tron-red hover:bg-tron-red/10",
+                  ]}
+                >
+                  {link.label}
+                </a>
+              );
+            })
+          }
         </div>
       </header>
 
