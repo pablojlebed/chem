@@ -5,13 +5,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Tron: Ares Palette
-        "tron-black": "#0d1117", // Very dark blue-gray, almost black
-        "tron-dark-200": "#161b22", // Slightly lighter for cards/headers
-        "tron-red": "#ef233c", // The Ares vibrant red
-        "tron-red-dim": "rgba(239, 35, 60, 0.1)", // For backgrounds
-        "tron-orange": "#ffa500", // For warnings/accents (keep as secondary if needed)
-        "tron-grid": "#1a2634", // Grid line color
+        // Tron: Ares Palette (Reference: icpms-sim.thelabguy.org)
+        "tron-black": "#000000", // Pure black
+        "tron-dark-200": "#0a0a0f", // Deep black/gray
+        "tron-red": "#FF0033", // Vibrant Crimson
+        "tron-red-dim": "rgba(255, 0, 51, 0.1)", // For backgrounds
+        "tron-cyan": "#00F0FF", // Re-added for text
+        "tron-orange": "#FF4500", // Tron Orange if needed
+        "tron-grid": "rgba(0, 240, 255, 0.15)", // Cyan tint for grid from ref
 
         // Neutrals (adapted for dark mode)
         "gray-50": "#f9fafb", // Keep for text on light (if any)
@@ -26,16 +27,16 @@ export default {
         "gray-900": "#111827",
 
         // Mapping to "primary" for compatibility if needed, but prefer specific names
-        "primary-blue": "#ef233c",
-        "primary-blue-dark": "#d90429",
+        "primary-blue": "#FF0033",
+        "primary-blue-dark": "#DC143C",
       },
       fontFamily: {
         sans: ["Orbitron", "Poppins", "ui-sans-serif", "system-ui", "sans-serif"],
         mono: ["Space Mono", "monospace"],
       },
       boxShadow: {
-        "glow-red": "0 0 10px rgba(239, 35, 60, 0.5), 0 0 20px rgba(239, 35, 60, 0.3)",
-        "glow-orange": "0 0 10px rgba(255, 165, 0, 0.5), 0 0 20px rgba(255, 165, 0, 0.3)",
+        "glow-red": "0 0 10px rgba(255, 0, 51, 0.6), 0 0 20px rgba(255, 0, 51, 0.3)",
+        "glow-orange": "0 0 10px rgba(255, 69, 0, 0.6), 0 0 20px rgba(255, 69, 0, 0.3)",
         "glass": "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
       },
     },
