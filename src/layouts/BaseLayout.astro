@@ -23,33 +23,28 @@ const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
       data-website-id="545a05e7-69b0-4164-8107-6acb6143d88c"></script>
   </head>
   <body
-    class="bg-gray-50 text-gray-700 font-sans antialiased min-h-screen flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8"
+    class="bg-transparent text-gray-200 font-sans antialiased min-h-screen flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 selection:bg-tron-red selection:text-tron-black"
   >
-    {/* General text color and font-sans */}
-
     <div
-      class="w-full max-w-5xl bg-white rounded-xl shadow-medium overflow-hidden"
+      class="w-full max-w-5xl bg-tron-dark-200/80 backdrop-blur-md rounded-xl shadow-[0_0_20px_rgba(239,35,60,0.1)] border border-tron-red/20 overflow-hidden"
     >
-      <header class="bg-white shadow-light">
+      <header
+        class="bg-tron-dark-200/90 border-b border-tron-red/20 shadow-glow-red relative z-10"
+      >
         <div
           class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between"
         >
           {/* Logo/Name Section */}
           <div>
             <a href="/" class="group block">
-              {
-                /* Removed default text-gray-900 from group as h1/p will define */
-              }
               <h1
-                class="text-2xl font-bold leading-tight !my-0 text-primary-blue group-hover:text-primary-blue-dark transition-colors duration-200"
+                class="text-2xl font-bold leading-tight !my-0 text-tron-red group-hover:text-white transition-colors duration-200 drop-shadow-[0_0_5px_rgba(239,35,60,0.8)]"
               >
-                {/* Set H1 color to primary-blue, primary-blue-dark on hover */}
                 Pablo J Lebed
               </h1>
               <p
-                class="text-base font-semibold text-gray-700 tracking-wide leading-tight !my-0"
+                class="text-base font-semibold text-gray-300 tracking-wide leading-tight !my-0 group-hover:text-tron-red transition-colors"
               >
-                {/* Keep as gray-700 */}
                 Analytical Chemist
               </p>
             </a>
@@ -58,47 +53,45 @@ const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
           {/* Mobile Menu Toggle */}
           <button
             id="menu-toggle"
-            class="md:hidden text-gray-900 focus:outline-none text-3xl leading-none"
+            class="md:hidden text-tron-red focus:outline-none text-3xl leading-none hover:text-white hover:drop-shadow-[0_0_5px_rgba(239,35,60,1)] transition-all"
           >
-            {/* Use gray-900 */}
             ☰
           </button>
 
           {/* Desktop Navigation */}
+          {/* Desktop Navigation */}
           <nav
             id="navbar"
-            class="hidden md:flex space-x-8 text-gray-700 font-semibold tracking-wide"
+            class="hidden md:flex space-x-8 text-gray-200 font-semibold tracking-wide"
           >
-            {/* Use gray-700 */}
             <a
               href="/"
-              class="hover:text-primary-blue transition-colors duration-200"
+              class="hover:text-tron-red hover:drop-shadow-[0_0_5px_rgba(239,35,60,0.8)] transition-all duration-200"
               >Home</a
             >
-            {/* Use primary-blue hover */}
             <a
               href="/services"
-              class="hover:text-primary-blue transition-colors duration-200"
+              class="hover:text-tron-red hover:drop-shadow-[0_0_5px_rgba(239,35,60,0.8)] transition-all duration-200"
               >Services</a
             >
             <a
               href="/technical-notes"
-              class="hover:text-primary-blue transition-colors duration-200"
+              class="hover:text-tron-red hover:drop-shadow-[0_0_5px_rgba(239,35,60,0.8)] transition-all duration-200"
               >Technical Notes</a
             >
             <a
               href="/tools"
-              class="hover:text-primary-blue transition-colors duration-200"
+              class="text-tron-red drop-shadow-[0_0_5px_rgba(239,35,60,0.5)] border-b-2 border-tron-red"
               >Tools</a
             >
             <a
               href="/about"
-              class="hover:text-primary-blue transition-colors duration-200"
+              class="hover:text-tron-red hover:drop-shadow-[0_0_5px_rgba(239,35,60,0.8)] transition-all duration-200"
               >About</a
             >
             <a
               href="/contact"
-              class="hover:text-primary-blue transition-colors duration-200"
+              class="hover:text-tron-red hover:drop-shadow-[0_0_5px_rgba(239,35,60,0.8)] transition-all duration-200"
               >Contact</a
             >
           </nav>
@@ -107,50 +100,47 @@ const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
         {/* Mobile Navigation */}
         <div
           id="mobile-nav"
-          class="md:hidden hidden px-6 pb-6 space-y-4 text-gray-700 font-semibold tracking-wide"
+          class="md:hidden hidden px-6 pb-6 space-y-4 text-gray-200 font-semibold tracking-wide bg-tron-dark-200 border-t border-tron-red/20"
         >
           <a
             href="/"
-            class="block hover:text-primary-blue transition-colors duration-200"
+            class="block hover:text-tron-red hover:bg-tron-red/10 p-2 rounded transition-colors duration-200"
             >Home</a
           >
           <a
             href="/services"
-            class="block hover:text-primary-blue transition-colors duration-200"
+            class="block hover:text-tron-red hover:bg-tron-red/10 p-2 rounded transition-colors duration-200"
             >Services</a
           >
           <a
             href="/technical-notes"
-            class="block hover:text-primary-blue transition-colors duration-200"
+            class="block hover:text-tron-red hover:bg-tron-red/10 p-2 rounded transition-colors duration-200"
             >Technical Notes</a
           >
           <a
             href="/tools"
-            class="block hover:text-primary-blue transition-colors duration-200"
-            >Tools</a
+            class="block text-tron-red bg-tron-red/10 p-2 rounded">Tools</a
           >
-          {/* ADDED THIS LINE */}
           <a
             href="/about"
-            class="block hover:text-primary-blue transition-colors duration-200"
+            class="block hover:text-tron-red hover:bg-tron-red/10 p-2 rounded transition-colors duration-200"
             >About</a
           >
           <a
             href="/contact"
-            class="block hover:text-primary-blue transition-colors duration-200"
+            class="block hover:text-tron-red hover:bg-tron-red/10 p-2 rounded transition-colors duration-200"
             >Contact</a
           >
         </div>
       </header>
 
-      <main class="w-4xl mx-auto px-4 py-6 flex-grow">
+      <main class="w-full mx-auto px-4 py-8 flex-grow relative z-0">
         <slot />
       </main>
 
       <footer
-        class="text-sm text-gray-600 py-8 border-t border-gray-200 mt-12 text-center"
+        class="text-sm text-gray-400 py-8 border-t border-tron-red/20 mt-12 text-center bg-tron-dark-200/50"
       >
-        {/* Use gray-600 and gray-200 */}
         © {new Date().getFullYear()} Pablo Lebed. All rights reserved.
       </footer>
     </div>

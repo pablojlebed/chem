@@ -8,22 +8,37 @@
 @tailwind utilities;
 
 @layer base {
+
+  /* Import Orbitron for headings */
+  @font-face {
+    font-family: 'Orbitron';
+    src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+    font-weight: 400 900;
+    font-style: normal;
+  }
+
   html {
     scroll-behavior: smooth;
-    font-family: theme("fontFamily.sans"); /* Now Poppins */
-    color: theme(
-      "colors.gray-700"
-    ); /* Default body text color from web dev portfolio */
-    background-color: theme(
-      "colors.gray-50"
-    ); /* Keeping white background for body as per AC site screenshot */
+    font-family: theme("fontFamily.sans");
+    color: #e5e7eb;
+    /* Light gray text for readability on dark */
+    background-color: theme("colors.tron-black");
+    background-image:
+      linear-gradient(theme("colors.tron-grid") 1px, transparent 1px),
+      linear-gradient(90deg, theme("colors.tron-grid") 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center 0;
     line-height: 1.6;
   }
 
+  /* Add a gradient overlay to fade the grid at the bottom or top if desired, 
+     or just keep it consistent. */
   body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
+    background-color: rgba(13, 17, 23, 0.9);
+    /* Slight overlay to dampen the grid if needed */
   }
 
   *,
@@ -38,52 +53,78 @@
   h4,
   h5,
   h6 {
-    font-family: theme("fontFamily.sans");
-    font-weight: theme("fontWeight.bold"); /* Poppins 'bold' (700) */
-    color: theme("colors.gray-900"); /* Darkest gray for headings */
-    letter-spacing: -0.025em;
-    line-height: 1.2;
+    font-family: 'Orbitron', theme("fontFamily.sans");
+    font-weight: 700;
+    color: theme("colors.tron-red");
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 10px rgba(239, 35, 60, 0.3);
   }
 
   h1 {
     font-size: 3rem;
     margin: 1.5rem 0 1rem;
+    filter: drop-shadow(0 0 15px rgba(239, 35, 60, 0.5));
   }
+
   h2 {
     font-size: 2.25rem;
     margin: 1.75rem 0 1rem;
   }
+
   h3 {
     font-size: 1.75rem;
     margin: 1.5rem 0 0.75rem;
   }
+
   h4 {
     font-size: 1.25rem;
     margin: 1.25rem 0 0.5rem;
   }
+
   h5 {
     font-size: 1.125rem;
     margin: 1rem 0 0.5rem;
   }
+
   h6 {
     font-size: 1rem;
     margin: 0.75rem 0 0.25rem;
   }
 
   a {
-    color: theme("colors.primary-blue"); /* Vibrant blue for links */
+    color: theme("colors.tron-red");
     text-decoration: none;
-    transition: color 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
   }
 
   a:hover,
   a:focus {
-    color: #1A73E8; /* Darker blue on hover */
-    text-decoration: underline;
+    color: #fff;
+    text-shadow: 0 0 8px theme("colors.tron-red");
+    text-decoration: none;
     outline: none;
   }
 
   p {
     margin: 1rem 0;
   }
+}
+
+/* Custom scrollbar for Webkit */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: theme("colors.tron-black");
+}
+
+::-webkit-scrollbar-thumb {
+  background: theme("colors.tron-dark-200");
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: theme("colors.tron-red");
 }
