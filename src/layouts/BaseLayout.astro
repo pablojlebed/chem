@@ -23,8 +23,13 @@ const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
       data-website-id="545a05e7-69b0-4164-8107-6acb6143d88c"></script>
   </head>
   <body
-    class="bg-transparent text-tron-cyan font-sans antialiased min-h-screen flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 selection:bg-tron-red selection:text-tron-black"
+    class="bg-transparent text-tron-cyan font-sans antialiased min-h-screen flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 selection:bg-tron-red selection:text-tron-black relative"
   >
+    {/* Scanline Overlay */}
+    <div
+      class="pointer-events-none fixed inset-0 z-50 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] pointer-events-none"
+    >
+    </div>
     <div
       class="w-full max-w-5xl bg-tron-dark-200/80 backdrop-blur-md rounded-xl shadow-[0_0_20px_rgba(255,0,51,0.1)] border border-tron-red/20 overflow-hidden"
     >
@@ -138,8 +143,9 @@ const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
         <slot />
       </main>
 
+      <hr />
       <footer
-        class="text-sm text-tron-cyan py-8 border-t border-tron-red/20 mt-12 text-center bg-tron-dark-200/50"
+        class="text-sm text-tron-cyan py-8 mt-4 text-center bg-tron-dark-200/50"
       >
         © {new Date().getFullYear()} Pablo Lebed. All rights reserved.
       </footer>

@@ -3,7 +3,7 @@ title: "Internal Standards"
 description: "Understanding acceptable recovery ratios for internal standards and why you should define your own."
 pubDate: 2025-08-14
 tags: ["ICP-MS", "ICP-OES", "Internal Standard"]
-heroImage: "/images/internal-standard.png"
+heroImage: "/images/internal-standard-hero.png"
 author: "Pablo J Lebed"
 ---
 A frequent doubt I notice from newcomers in analytical chemistry is:

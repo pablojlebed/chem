@@ -3,7 +3,7 @@ title: "Supplier Quality I"
 description: "How understanding your supplier’s test methods can enhance your organization’s quality assurance processes."
 pubDate: 2025-08-14
 tags: ["Supplier Quality", "Analytical Chemistry", "Test Methods", "ICP-OES"]
-heroImage: "/images/supplier-quality.png"
+heroImage: "/images/supplier-quality-hero.png"
 author: "Pablo J Lebed"
 ---
 

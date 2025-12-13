@@ -3,7 +3,7 @@ title: Battery Materials Analysis
 description: Access a curated database of ICP-OES and ICP-MS application notes, meticulously organized in Notion for easy reference.
 pubDate: 2025-08-01T10:00:00Z
 tags: ["Database", "Application Notes", "ICP-OES", "ICP-MS", "Resources"]
-heroImage: "/images/battery-analysis.png"
+heroImage: "/images/battery-analysis-hero.png"
 author: "Pablo J Lebed"
 ---
 

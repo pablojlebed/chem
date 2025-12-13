@@ -3,7 +3,7 @@ title: Nordtest
 description: Nordtest is a joint Nordic body that was originally founded in 1973 under the Nordic Council of Ministers. Its primary purpose is to promote and develop Nordic test methods and cooperation in the field of conformity assessment.
 pubDate: 2025-08-14T10:00:00Z
 tags: ["Application Notes", "Nordtest", "QC"]
-heroImage: "/images/nordtest.png"
+heroImage: "/images/nordtest-hero.png"
 author: "Pablo J Lebed"
 ---
 If you want to develop professional competencies in **Chemical Laboratory Quality Control and Metrology**, I highly recommend checking out Nordtest.

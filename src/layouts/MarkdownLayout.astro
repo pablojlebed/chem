@@ -67,13 +67,13 @@ const { title, description, author, pubDate, updatedDate, heroImage, tags } =
         <img
           src={heroImage}
           alt={title}
-          class="w-full h-auto object-contain mx-auto rounded-lg mb-8 shadow-lg border border-tron-red/20 bg-tron-dark-200/50"
+          class="w-full h-auto object-contain mx-auto rounded-lg mb-8 shadow-lg border border-tron-red/20 bg-white"
         />
       )
     }
 
     <div
-      class="mx-auto text-base leading-relaxed space-y-6 text-tron-cyan [&>a]:text-tron-red [&>a:hover]:underline [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-tron-red [&>h3]:text-xl [&>h3]:text-tron-red [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>blockquote]:border-l-4 [&>blockquote]:border-tron-red [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-tron-cyan/80"
+      class="mx-auto text-base leading-relaxed space-y-6 text-tron-cyan [&>a]:text-tron-red [&>a:hover]:underline [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-tron-red [&>h3]:text-xl [&>h3]:text-tron-red [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5 [&>blockquote]:border-l-4 [&>blockquote]:border-tron-red [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-tron-cyan/80 [&_img]:bg-white [&_img]:rounded-lg [&_img]:shadow-lg [&_img]:mx-auto [&_img]:border [&_img]:border-tron-red/20"
     >
       <slot />
     </div>

@@ -3,7 +3,7 @@ title: SPC Seminar
 description: An accessible introduction to Statistical Process Control (SPC), exploring how control charts and data analysis help monitor process stability, detect variation, and drive continuous improvement.
 pubDate: 2025-08-09T10:00:00Z
 tags: ["Application Notes", "Seminar", "SPC"]
-heroImage: "/images/spc-seminar.png"
+heroImage: "/images/spc-seminar-hero.png"
 author: "Pablo J Lebed"
 ---
 ## Dr. Donald J. Wheeler’s “Understanding SPC” Seminar — An Exceptional Resource

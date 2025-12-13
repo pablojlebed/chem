@@ -3,7 +3,7 @@ title: R&D LIMS I
 description: The Development of a Laboratory Information Management System
 pubDate: 2025-08-08T10:00:00Z
 tags: ["Database", "Application Notes", "LIMS"]
-heroImage: "/images/lims.png"
+heroImage: "/images/lims-hero.png"
 author: "Pablo J Lebed"
 ---
 
