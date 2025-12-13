@@ -31,7 +31,7 @@ export default {
         "primary-blue-dark": "#DC143C",
       },
       fontFamily: {
-        sans: ["Orbitron", "Poppins", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["Poppins", "Orbitron", "ui-sans-serif", "system-ui", "sans-serif"],
         mono: ["Space Mono", "monospace"],
       },
       boxShadow: {
