@@ -31,49 +31,35 @@
     }
 
     /* Input Grid Overrides for Dark Mode */
-    #inputGrid td:not(:first-child) {
-      padding: 0 !important;
-      text-align: center;
-      vertical-align: middle;
-      border-right: 1px solid rgba(255, 0, 51, 0.1);
-      border-bottom: 1px solid rgba(255, 0, 51, 0.1);
-      background-color: #0a0a0f; /* Force Dark Background */
+    #inputGrid td {
+      border-color: rgba(255, 0, 51, 0.2);
     }
 
-    #inputGrid td:not(:first-child) input {
+    #inputGrid input {
+      border: none;
+      outline: none;
       width: 100%;
       height: 100%;
-      min-height: 52px;
-      padding: 0.5rem 0.25rem;
-      border: none;
-      background-color: #0a0a0f; /* Force Dark Background on Input too */
+      background: transparent;
+      color: #00f0ff;
       text-align: center;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #00f0ff; /* Tron Cyan */
       font-variant-numeric: tabular-nums;
-      box-sizing: border-box;
     }
 
-    #inputGrid td:not(:first-child) input:focus {
-      outline: none;
-      background-color: rgba(0, 240, 255, 0.05);
+    #inputGrid input:focus {
+      background: rgba(0, 240, 255, 0.05);
       box-shadow: inset 0 0 0 1px #00f0ff;
-      color: #ffffff;
     }
 
-    /* Hide spinners */
-    #inputGrid input::-webkit-inner-spin-button,
-    #inputGrid input::-webkit-outer-spin-button {
+    /* Aggressively Hide Spinners - No longer needed as we use type="text" but keeping a minimal reset just in case */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
-    #inputGrid input {
-      -moz-appearance: textfield;
-    }
 
     /* Hover effect */
-    #inputGrid tr:hover td:not(:first-child) input {
+    #inputGrid tr:hover td input {
       background: rgba(255, 0, 51, 0.05);
     }
 
@@ -129,18 +115,21 @@
         <!-- Input Table Container -->
         <div
           id="dataInputContainer"
-          class="overflow-x-auto max-h-[400px] border border-tron-red/20 rounded-lg bg-tron-dark-200 mb-4"
+          class="overflow-x-auto max-h-[400px] border border-tron-red/20 rounded-lg bg-tron-dark-200 mb-4 shadow-inner"
         >
-          <table id="inputGrid" class="w-full whitespace-nowrap table-fixed">
+          <table
+            id="inputGrid"
+            class="w-full whitespace-nowrap table-fixed border-collapse"
+          >
             <thead>
               <tr id="inputGridHeader">
                 <th
-                  class="sticky top-0 bg-tron-dark-200 px-2 py-3 text-center text-xs font-semibold text-tron-red w-[70px] border-b border-tron-red/20 border-r border-tron-red/20"
+                  class="sticky top-0 bg-tron-dark-200 px-2 py-3 text-center text-xs font-semibold text-tron-red w-[70px] border-b border-tron-red/20 shadow-md z-10"
                   >S.G.</th
                 >
               </tr>
             </thead>
-            <tbody id="inputGridBody">
+            <tbody id="inputGridBody" class="divide-y divide-tron-red/10">
               <!-- Rows will be injected here -->
             </tbody>
           </table>
@@ -460,21 +449,25 @@
       for (let i = 0; i < count; i++) {
         const newRowIndex = numRows + i;
         const tr = document.createElement("tr");
-        tr.className = "hover:bg-tron-red/5";
+        tr.className = "hover:bg-tron-red/5 transition-colors duration-150";
 
         const tdLabel = document.createElement("td");
         tdLabel.className =
-          "bg-tron-dark-200 sticky left-0 text-sm text-center border-r border-tron-red/20 text-tron-cyan/70 font-mono";
+          "bg-tron-dark-200 sticky left-0 text-sm text-center border-r border-tron-red/20 text-tron-cyan/70 font-mono py-2";
         tdLabel.textContent = (newRowIndex + 1).toString();
         tr.appendChild(tdLabel);
 
         for (let j = 0; j < currentCols; j++) {
           const td = document.createElement("td");
-          td.className = "min-w-[70px]";
+          td.className =
+            "min-w-[70px] bg-tron-dark-200 border-r border-b border-tron-red/10 p-0";
+
           const input = document.createElement("input");
-          input.type = "number";
-          input.step = "any";
-          input.className = "data-input-cell text-sm text-tron-cyan";
+          input.type = "text";
+          input.inputMode = "decimal";
+          // Explicitly setting classes for dark mode
+          input.className =
+            "data-input-cell text-sm text-tron-cyan w-full h-full bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-tron-cyan py-3 text-center";
           input.id = `input-${newRowIndex}-${j}`;
           input.setAttribute("data-row", String(newRowIndex));
           input.setAttribute("data-col", String(j));
@@ -503,7 +496,7 @@
         // Update Header
         const th = document.createElement("th");
         th.className =
-          "sticky top-0 bg-tron-dark-200 px-2 py-3 text-center text-xs font-semibold text-tron-red min-w-[70px] border-b border-tron-red/20";
+          "sticky top-0 bg-tron-dark-200 px-2 py-3 text-center text-xs font-semibold text-tron-red min-w-[70px] border-b border-tron-red/20 shadow-md";
         th.textContent = `X${newColIndex + 1}`;
         if (header) {
           header.appendChild(th);
@@ -514,11 +507,14 @@
           for (let i = 0; i < currentRows; i++) {
             const tr = body.children[i];
             const td = document.createElement("td");
-            td.className = "min-w-[70px]";
+            td.className =
+              "min-w-[70px] bg-tron-dark-200 border-r border-b border-tron-red/10 p-0";
+
             const input = document.createElement("input");
-            input.type = "number";
-            input.step = "any";
-            input.className = "data-input-cell text-sm text-tron-cyan";
+            input.type = "text";
+            input.inputMode = "decimal";
+            input.className =
+              "data-input-cell text-sm text-tron-cyan w-full h-full bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-tron-cyan py-3 text-center";
             input.id = `input-${i}-${newColIndex}`;
             input.setAttribute("data-row", String(i));
             input.setAttribute("data-col", String(newColIndex));
@@ -892,9 +888,7 @@
               {
                 label: "Range (R)",
                 data: rValues,
-                borderColor: "rgba(168, 85, 247, 1)", // Purple for Range to verify
-                borderColor: "#00F0FF", // Switch to Cyan for consistency or Purple? Let's use Cyan for primary data
-                borderColor: "#d946ef", // Fuchsia for Range distinctness? Or just Cyan. Let's use Cyan to match.
+                borderColor: "#00F0FF", // Tron Cyan
                 backgroundColor: "rgba(0, 240, 255, 0.1)",
                 borderWidth: 2,
                 pointRadius: 4,
@@ -985,23 +979,26 @@
       // 2. Render Rows
       for (let i = 0; i < numRows; i++) {
         const tr = document.createElement("tr");
-        tr.className = "hover:bg-tron-red/5";
+        tr.className = "hover:bg-tron-red/5 transition-colors duration-150";
 
         // Subgroup label cell
         const tdLabel = document.createElement("td");
         tdLabel.className =
-          "bg-tron-dark-200 sticky left-0 text-sm text-center border-r border-tron-red/20 text-tron-cyan/70 font-mono";
+          "bg-tron-dark-200 sticky left-0 text-sm text-center border-r border-tron-red/20 text-tron-cyan/70 font-mono py-2";
         tdLabel.textContent = (i + 1).toString();
         tr.appendChild(tdLabel);
 
         // Data input cells
         for (let j = 0; j < numCols; j++) {
           const td = document.createElement("td");
-          td.className = "min-w-[70px]";
+          td.className =
+            "min-w-[70px] bg-tron-dark-200 border-r border-b border-tron-red/10 p-0";
+
           const input = document.createElement("input");
-          input.type = "number";
-          input.step = "any";
-          input.className = "data-input-cell text-sm text-tron-cyan";
+          input.type = "text";
+          input.inputMode = "decimal";
+          input.className =
+            "data-input-cell text-sm text-tron-cyan w-full h-full bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-tron-cyan py-3 text-center";
           input.id = `input-${i}-${j}`;
           input.setAttribute("data-row", String(i));
           input.setAttribute("data-col", String(j));
