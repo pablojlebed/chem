@@ -67,7 +67,7 @@ const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
           {/* Desktop Navigation */}
           <nav
             id="navbar"
-            class="hidden md:flex space-x-8 text-gray-200 font-semibold tracking-wide"
+            class="hidden md:flex space-x-8 text-tron-cyan font-semibold tracking-wide"
           >
             {
               [
@@ -87,8 +87,8 @@ const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
                     href={link.href}
                     class:list={[
                       isActive
-                        ? "text-tron-red drop-shadow-[0_0_5px_rgba(255,0,51,0.5)] border-b-2 border-tron-red"
-                        : "hover:text-tron-red hover:drop-shadow-[0_0_5px_rgba(255,0,51,0.8)] transition-all duration-200 border-b-2 border-transparent",
+                        ? "text-tron-cyan drop-shadow-[0_0_5px_rgba(0,240,255,0.5)] border-b-2 border-tron-cyan"
+                        : "hover:text-tron-cyan hover:drop-shadow-[0_0_5px_rgba(0,240,255,0.8)] transition-all duration-200 border-b-2 border-transparent",
                     ]}
                   >
                     {link.label}
@@ -102,7 +102,7 @@ const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
         {/* Mobile Navigation */}
         <div
           id="mobile-nav"
-          class="md:hidden hidden px-6 pb-6 space-y-4 text-gray-200 font-semibold tracking-wide bg-tron-dark-200 border-t border-tron-red/20"
+          class="md:hidden hidden px-6 pb-6 space-y-4 text-tron-cyan font-semibold tracking-wide bg-tron-dark-200 border-t border-tron-red/20"
         >
           {
             [
@@ -123,8 +123,8 @@ const { title = "Pablo Lebed – Freelance Analytical Chemist" } = Astro.props;
                   class:list={[
                     "block p-2 rounded transition-colors duration-200",
                     isActive
-                      ? "text-tron-red bg-tron-red/10"
-                      : "hover:text-tron-red hover:bg-tron-red/10",
+                      ? "text-tron-cyan bg-tron-cyan/10"
+                      : "hover:text-tron-cyan hover:bg-tron-cyan/10",
                   ]}
                 >
                   {link.label}
